@@ -3,6 +3,7 @@ import express from 'express';
 import * as url from 'url';
 import path from 'node:path';
 import chalk from 'chalk';
+import { getRawData } from './dataManager';
 
 let app = express();
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
@@ -13,7 +14,12 @@ app.use(express.static(buildPath));
 
 
 app.get('/', (req,res)=> {
-  res.sendFile(path + "index.html");
+  res.sendFile(buildPath + "/index.html");
+});
+
+app.get("/data", (req, res) => {
+  res.type("json");
+  res.send(getRawData());
 });
 
 const PORT = process.env.PORT || 8080;
