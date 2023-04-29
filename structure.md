@@ -6,8 +6,8 @@
 - server.ts
 - dist
 - src
-  - index.html
   - index.ts
   - style.css
+- index.html
 - data
   - data.json
