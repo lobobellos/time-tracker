@@ -3,16 +3,22 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "index.ts",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node --no-warnings --loader ts-node/esm index.ts"
   },
   "dependencies": {
+    "express": "^4.18.2",
     "vue": "^3.2.47"
   },
   "devDependencies": {
+    "@types/express": "^4.17.17",
     "@vitejs/plugin-vue": "^4.1.0",
+    "chalk": "^5.2.0",
+    "ts-node": "^10.9.1",
     "typescript": "^5.0.2",
     "vite": "^4.3.2",
     "vue-tsc": "^1.4.2"
