@@ -8,7 +8,8 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "start": "node --no-warnings --loader ts-node/esm index.ts"
+    "start": "node --no-warnings --loader ts-node/esm index.ts",
+    "create-data": "node --no-warnings --loader ts-node/esm scripts/resetData.ts"
   },
   "dependencies": {
     "express": "^4.18.2",
