@@ -1,7 +1,12 @@
 import gpio from 'rpi-gpio'
 
-gpio.setup(7, gpio.DIR_IN, gpio.EDGE_RISING, () => {
-  console.log('button pressed')
+await gpio.promise.setup(7, gpio.DIR_IN, gpio.EDGE_RISING )
+
+
+gpio.on('change', (pin, value) => {
+  if(value == 7){
+    console.log('pressed')
+  }
 })
 
 
