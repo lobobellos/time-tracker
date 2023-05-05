@@ -9,9 +9,11 @@
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "start": "node --no-warnings --loader ts-node/esm index.ts",
-    "create-data": "node --no-warnings --loader ts-node/esm scripts/resetData.ts"
+    "create-data": "node --no-warnings --loader ts-node/esm scripts/resetData.ts",
+    "inputListen": "node --no-warnings --loader ts-node/esm inputListener.ts"
   },
   "dependencies": {
+    "@types/rpi-gpio": "^2.1.1",
     "express": "^4.18.2",
     "vue": "^3.2.47"
   },
