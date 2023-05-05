@@ -2,17 +2,7 @@ import fs from 'fs/promises';
 
 type time = [number, number];
 
-interface UserDataBase {
-  name: string;
-  age: number;
-  time: time[];
-}
-
-interface DataBase  {
-  userData: UserDataBase[];
-}
-
-class UserData implements UserDataBase {
+class UserData {
   name: string;
   age: number;
   time: time[];
@@ -24,40 +14,19 @@ class UserData implements UserDataBase {
     this.totalTime =  time.reduce((a, b) => (a[1]-a[0]) + (b[1]-b[0]), 0);
   }
 
-  static fromBase(base: UserDataBase): UserData{
-    return new UserData(base.name, base.age, base.time);
-  }
-
   toString(): string{
     return JSON.stringify({name: this.name, age: this.age, time: this.time});
   }
 }
 
-class Data implements DataBase {
-  userData: UserData[]
-  private constructor(userData: UserData[]){
-    this.userData = userData
-  }
-
-  static fromJSON(json: string): Data{
-    let parsed:DataBase = JSON.parse(json);
-    return new Data(
-      parsed.userData.map(
-        (base)=>UserData.fromBase(base)));
-  }
-
-  toString(): string{
-    return JSON.stringify({userData: this.userData.map(el=>el.toString())});
-  }
-};
-
-
-export async function getRawData(){
-  return Data.fromJSON(
-    await fs.readFile('./data/data.json', 'utf-8')
-  )
+export async function getRawData(): Promise<UserData[]>{
+  return JSON.parse(await fs.readFile('./data/data.json', 'utf-8'));
 }
 
-export function writeData(data: Data){
+export async function getParsedData(){
+  return (await getRawData()).map(d => new UserData(d.name, d.age, d.time));
+}
+
+export function writeData(data: UserData[]){
   return fs.writeFile('./data/data.json',data.toString() )
 }
