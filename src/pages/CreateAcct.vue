@@ -23,7 +23,7 @@
 let form: HTMLFormElement;
 window.onload = ()=>{
   form = document.forms[0]
-  form.onsubmit = e=>{
+  form.onsubmit = async e=>{
     e.preventDefault()
     let data = new FormData(form)
     if(data.get('pin') != data.get('pin2')){
@@ -41,6 +41,10 @@ window.onload = ()=>{
         pin: data.get('pin'),
       }),
       
+    }).then(async res=>{
+      alert(res.ok?
+      "account created" :
+      await res.text())
     })
   }
 }
