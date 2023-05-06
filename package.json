@@ -9,6 +9,7 @@
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "start": "node --no-warnings --loader ts-node/esm index.ts",
+    "server": "node --no-warnings --loader ts-node/esm server.ts",
     "create-data": "node --no-warnings --loader ts-node/esm scripts/resetData.ts",
     "inputListen": "node --no-warnings --loader ts-node/esm inputListener.ts"
   },
