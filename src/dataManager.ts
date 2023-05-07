@@ -1,26 +1,42 @@
 import fs from 'fs/promises';
 
-type time = [number, number];
+export type time = [number, number];
 
-type UserData =[
+export type UserData =[
   pin: number,
   name: string,
   title: string,
   times: time[]
 ]
 
-class User {
-  pin: number
-  name: string
-  title: string
-  times: time[]
-  sumTime: number
+export class User {
+  pin: number;
+  name: string;
+  title: string;
+  times: time[];
+  sumTime: number;  
+  sumTimeString: string;
   constructor(...[pin, name, title, times]: UserData){
-    this.pin = pin
-    this.name = name
-    this.title = title
-    this.times = times
-    this.sumTime = times.map(el=>el[1]-el[0]).reduce((a, b) => a+b, 0)
+    this.pin = pin;
+    this.name = name;
+    this.title = title;
+    this.times = times;
+    this.updateSumTime();
+
+  }
+
+  updateSumTime(){
+    this.sumTime = sum(...this.times.map(el=>el[1]-el[0]));
+    const ms = this.sumTime % 1000;
+    this.sumTime = Math.floor(this.sumTime / 1000)
+    const s = this.sumTime % 60;
+    this.sumTime = Math.floor(this.sumTime / 60)
+    const m = this.sumTime % 60;
+    this.sumTime = Math.floor(this.sumTime / 60)
+    const h = this.sumTime % 24;
+    this.sumTime = Math.floor(this.sumTime / 24)
+    const d = this.sumTime;
+    this.sumTimeString = ` ${d} days, ${h} hours, ${m} mins, ${s} seconds ${ms} ms `
   }
 
   toBase(): UserData{
@@ -32,14 +48,14 @@ class User {
     ]
   }
 
-  fromBase(data: string){
-    return new User(...<UserData>JSON.parse(data))
+  static fromBase(data: string){
+    return new User(...<UserData>JSON.parse(data));
   }
 }
 
 
 
-function sum(...arr: number[]) {
+export function sum(...arr: number[]) {
   return arr.reduce((a, b) => a + b, 0);
 }
 
