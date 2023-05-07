@@ -6,10 +6,12 @@ import App from './App.vue'
 
 import CreateAcct from './pages/CreateAcct.vue'
 import Home from './pages/Home.vue'
+import LookByDay from './pages/LookByDay.vue'
 
 const routes = [
  {path:'/', component: Home},
- {path:'/createAcct', component: CreateAcct}
+ {path:'/createAcct', component: CreateAcct},
+ {path:'/lookByDay', component: LookByDay},
 ]
 
 const router = createRouter({

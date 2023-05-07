@@ -1,10 +1,13 @@
 <template>
   <div class="container">
     <div class="item">
-      <router-link to="/">home</router-link>
+      <router-link to="/">Home</router-link>
     </div>
     <div class="item">
-      <router-link to="/createAcct">create an account</router-link>
+      <router-link to="/createAcct">Create an account</router-link>
+    </div>
+    <div class="item">
+      <router-link to="/lookByDay">Specific day data</router-link>
     </div>
   </div>
 </template>
@@ -24,10 +27,6 @@ export default {
 
 <style scoped>
 
-router-link{
-  font-family: 'Fira Sans', sans-serif;
-}
-
 .container{
   display:flex;
   flex-direction: row;
@@ -35,5 +34,6 @@ router-link{
 
 .item{
   margin: 0.5rem;
+  font-family: 'Fira Sans', sans-serif;
 }
 </style>
