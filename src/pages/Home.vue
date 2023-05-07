@@ -1,25 +1,27 @@
 <template>
-  <h1>welcome to the home page</h1>
-  <router-link to="/createAcct">create an account</router-link>
-  <div class = "user" v-for="i in data">
-    
-      <h1>{{i.name}}</h1>
-      <p>{{ i.title }}</p>
-      <p>total time: {{ i.sumTimeString }}</p>
-      <p>{{i }}</p>
-    
+  <h1>Rankings:</h1>
+
+  <div class="user" v-for="[i, v] in data.entries()">
+    <div class="rank">
+      {{ i + 1 }}
+    </div>
+    <div class="data">
+      <h3>{{ v.name }}</h3>
+      <p>{{ v.title }}</p>
+      <p>total time: {{ v.sumTimeString }}</p>
+    </div>
   </div>
 </template>
 
 
 
 <script lang="ts">
-import {User, UserData} from '../dataManager.js'
+import { User, UserData } from '../dataManager.js'
 export default {
   name: 'Home',
   data() {
     return {
-      data: null  
+      data: null
     }
   },
   created() {
@@ -34,24 +36,43 @@ export default {
       { immediate: true }
     )
   },
-  methods:{
-    async fetchData (){
+  methods: {
+    async fetchData() {
       // this.data = await(await fetch('/data',{
       //   method: 'GET',
       // })).json()
       this.data = [
-        ["0","jo","team captain",[[0,1001],[2000,3000],[0,121000]]],
-        ["1","mi hael","driver",[]]
-      
-      ].map(el=> new User(...<UserData>el)).sort((a:User,b:User)=>b.sumTime- a.sumTime)
+        ["0", "Josiah", "Team Captain", [[0, 1001], [2000, 3000], [0, 121000]]],
+        ["1", "Michael", "Drive Team Captain", [[0, 6000000]]]
+
+      ].map(el => new User(...<UserData>el)).sort((a: User, b: User) => b.sumTime - a.sumTime)
     }
   }
 }
 </script>
 
 <style>
-.user{
-  border:2px dashed black
+h1 {
+  font-family: 'Fira Sans', sans-serif;
 }
 
+.user {
+  border: 2px dashed black;
+  display: flex;
+  flex-direction: row;
+  font-family: 'Fira Sans', sans-serif;
+}
+
+.user .rank {
+  margin: 2rem
+}
+
+.user .data {
+  margin: 0.2rem;
+}
+
+.data h3,
+.data p {
+  margin: 0px;
+}
 </style>
