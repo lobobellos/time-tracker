@@ -14,8 +14,14 @@ export class User {
   name: string;
   title: string;
   times: time[];
+  ms: number;
+  s:number;
+  m:number;
+  h:number;
+  d:number;
   sumTime: number;  
   sumTimeString: string;
+
   constructor(...[pin, name, title, times]: UserData){
     this.pin = pin;
     this.name = name;
@@ -27,16 +33,17 @@ export class User {
 
   updateSumTime(){
     this.sumTime = sum(...this.times.map(el=>el[1]-el[0]));
-    const ms = this.sumTime % 1000;
+    const temp = this.sumTime
+    this.ms = this.sumTime % 1000;
     this.sumTime = Math.floor(this.sumTime / 1000)
-    const s = this.sumTime % 60;
+    this.s = this.sumTime % 60;
     this.sumTime = Math.floor(this.sumTime / 60)
-    const m = this.sumTime % 60;
+    this.m = this.sumTime % 60;
     this.sumTime = Math.floor(this.sumTime / 60)
-    const h = this.sumTime % 24;
+    this.h = this.sumTime % 24;
     this.sumTime = Math.floor(this.sumTime / 24)
-    const d = this.sumTime;
-    this.sumTimeString = ` ${d} days, ${h} hours, ${m} mins, ${s} seconds ${ms} ms `
+    this.d = this.sumTime;
+    this.sumTimeString = ` ${this.d} days, ${this.h} hours, ${this.m} mins`
   }
 
   toBase(): UserData{
