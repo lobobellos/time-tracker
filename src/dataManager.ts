@@ -100,3 +100,10 @@ export async function getSortedData() {
 export async function writeData(data: UserData[]) {
   await fs.writeFile('./data/data.json', JSON.stringify(data), 'utf-8')
 }
+
+
+export const exampleData: UserData[] = [
+  [0, "Josiah", "Team Captain", [[0, 1001], [2000, 3000], [0, 121000]]],
+  [1, "Michael", "Drive Team Captain", [[0, 6000000]]],
+  [2, "Rebecca", "Team Captain", [[1683496997868, 1683497997868]]],
+]
