@@ -9,6 +9,7 @@
       <h3>{{ v.name }}</h3>
       <p>{{ v.title }}</p>
       <p>total time: {{ v.sumTimeString }}</p>
+      <p>total time ms: {{ v.sumTime }}</p>
     </div>
   </div>
 </template>
@@ -16,7 +17,7 @@
 
 
 <script lang="ts">
-import { User, UserData } from '../dataManager.js'
+import { User, UserData, exampleData } from '../dataManager.js'
 export default {
   name: 'Home',
   data() {
@@ -41,11 +42,9 @@ export default {
       // this.data = await(await fetch('/data',{
       //   method: 'GET',
       // })).json()
-      this.data = [
-        ["0", "Josiah", "Team Captain", [[0, 1001], [2000, 3000], [0, 121000]]],
-        ["1", "Michael", "Drive Team Captain", [[0, 6000000]]]
-
-      ].map(el => new User(...<UserData>el)).sort((a: User, b: User) => b.sumTime - a.sumTime)
+      this.data = exampleData
+        .map(el => new User(...<UserData>el))
+        .sort((a, b) => b.sumTime - a.sumTime)
     }
   }
 }
