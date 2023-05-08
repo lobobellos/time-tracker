@@ -1,6 +1,7 @@
 import gpio from 'rpi-gpio'
 import { getRawData, writeData } from './src/dataManager.js'
 import chalk from 'chalk'
+import type {time }from './src/dataManager.js'
 
 await gpio.promise.setup(7, gpio.DIR_IN, gpio.EDGE_RISING)
 await gpio.promise.setup(11, gpio.DIR_IN, gpio.EDGE_RISING)
@@ -18,42 +19,30 @@ let clockedIn= new Map<pin,timestamp>()
 console.log(chalk.blueBright("starting inputListener"))
 
 gpio.on('change', async rpipin => {
-  console.log(`pin ${rpipin} pressed`)
-  if(lastPin == null){
-    return
-  }
+  if(lastPin == null) return
   if (rpipin == 7) {
     //clock in
-    console.log('clock in')
-    clockedIn.set(lastPin, Date.now())
+    if(!clockedIn.has(lastPin)){
+      console.log('you are clocked in')
+      clockedIn.set(lastPin, Date.now())
+    }
   }else if (rpipin == 11) {
     //clock out
-    console.log('clock out')
-
     if(clockedIn.has(lastPin)){
-      //@ts-ignore
-      
+      let data = (await getRawData())
+      let el = data.find(el=>el[0] == lastPin)
+      if(el != undefined){
+        el[3]
+        .push([
+          <number>clockedIn.get(lastPin),
+          Date.now()
+        ])
+      }
+      await writeData(data)
+      clockedIn.delete(lastPin)
+      console.log('you are clocked out')
+      console.log(data[3])
     }
-    
-    let data = (await getRawData())
-    console.log("old data",data)
-    data = data.map(el=>el[0] == lastPin ?
-      [
-        el[0],
-        el[1],
-        el[2],
-        [
-          ...el[3],
-          [<number>clockedIn.get(lastPin), Date.now()],
-        ],
-      ]: el
-    )
-    console.log("new data",data)
-    await writeData(data)
-    
-    console.log("clocked in")
-    console.log(clockedIn.entries())
-
   }
 })
 
