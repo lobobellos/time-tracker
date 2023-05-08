@@ -17,7 +17,7 @@
 
 
 <script lang="ts">
-import { User, UserData, exampleData } from '../dataManager.js'
+import { User, UserData, exampleData, PrivateUser, privateUserData } from '../dataManager.js'
 export default {
   name: 'Home',
   data() {
@@ -43,7 +43,7 @@ export default {
       //   method: 'GET',
       // })).json()
       this.data = exampleData
-        .map(el => new User(...<UserData>el))
+        .map(el => new PrivateUser(...<privateUserData>el))
         .sort((a, b) => b.sumTime - a.sumTime)
     }
   }
