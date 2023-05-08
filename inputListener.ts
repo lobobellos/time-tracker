@@ -1,7 +1,9 @@
 import gpio from 'rpi-gpio'
 import { getRawData, writeData } from './src/dataManager.js'
+import chalk from 'chalk'
 
 await gpio.promise.setup(7, gpio.DIR_IN, gpio.EDGE_RISING)
+await gpio.promise.setup(11, gpio.DIR_IN, gpio.EDGE_RISING)
 
 type pin = number
 type timestamp = number
@@ -9,7 +11,10 @@ type timestamp = number
 let lastPin:null|number = null
 let clockedIn= new Map<pin,timestamp>()
 
+console.log(chalk.bgBlueBright("starting inputListener"))
+
 gpio.on('change', async rpipin => {
+  console.log("button pressed")
   if(lastPin == null){
     return
   }
@@ -18,7 +23,7 @@ gpio.on('change', async rpipin => {
     console.log('clock in')
     clockedIn.set(lastPin, Date.now())
 
-  }else if (rpipin == 8) {
+  }else if (rpipin == 11) {
     //clock out
     console.log('clock out')
 
