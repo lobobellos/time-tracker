@@ -3,7 +3,7 @@ import express from 'express';
 import * as url from 'url';
 import path from 'node:path';
 import chalk from 'chalk';
-import { addUser, getRawData } from './dataManager.js';
+import { addUser, getRawData } from './src/dataManager.js';
 
 let app = express();
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
