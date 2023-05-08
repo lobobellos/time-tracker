@@ -11,7 +11,7 @@ type timestamp = number
 let lastPin:null|number = null
 let clockedIn= new Map<pin,timestamp>()
 
-console.log(chalk.bgBlueBright("starting inputListener"))
+console.log(chalk.blueBright("starting inputListener"))
 
 gpio.on('change', async rpipin => {
   console.log("button pressed")
