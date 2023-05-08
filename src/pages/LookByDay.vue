@@ -39,9 +39,7 @@ export default {
   },
   methods:{
     getData(e:Event){
-
       this.selectedDate = (<HTMLInputElement>e.target).valueAsNumber;
-
       this.matchingData = data
       this.selected = true
     }
