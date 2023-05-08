@@ -31,12 +31,13 @@ gpio.on('change', async rpipin => {
     if(clockedIn.has(lastPin)){
       let data = (await getRawData())
       let el = data.find(el=>el[0] == lastPin)
-      if(el != undefined){
+      let t:time = [
+        <number>clockedIn.get(lastPin),
+        Date.now()
+      ]
+      if(el != undefined && isvalid(t)){
         el[3]
-        .push([
-          <number>clockedIn.get(lastPin),
-          Date.now()
-        ])
+        .push(t)
       }
       await writeData(data)
       clockedIn.delete(lastPin)
@@ -45,6 +46,17 @@ gpio.on('change', async rpipin => {
     }
   }
 })
+
+function isvalid(t:time):boolean{
+  const day = 24 * 60 * 60 * 1000
+  let [start,end] = t
+
+  start %=day
+  end %=day
+
+  return end > start && 
+  end - start < day 
+}
 
 process.stdin.resume();
 process.stdin.setEncoding('utf-8');
