@@ -14,7 +14,7 @@ let clockedIn= new Map<pin,timestamp>()
 console.log(chalk.blueBright("starting inputListener"))
 
 gpio.on('change', async rpipin => {
-  console.log("button pressed")
+  console.log(`pin ${rpipin} pressed`)
   if(lastPin == null){
     return
   }
