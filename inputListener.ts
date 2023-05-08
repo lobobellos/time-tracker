@@ -4,6 +4,10 @@ import chalk from 'chalk'
 
 await gpio.promise.setup(7, gpio.DIR_IN, gpio.EDGE_RISING)
 await gpio.promise.setup(11, gpio.DIR_IN, gpio.EDGE_RISING)
+await gpio.promise.setup(13, gpio.DIR_IN, gpio.EDGE_RISING)
+await gpio.promise.setup(15, gpio.DIR_IN, gpio.EDGE_RISING)
+
+gpio.setMode(gpio.MODE_RPI)
 
 type pin = number
 type timestamp = number
@@ -60,7 +64,7 @@ process.stdin.on('data', (data:string) => {
 })
 
 process.on('SIGINT', function () {
-  console.log('Ctrl-C...');
+  console.log('destroying pins.');
   gpio.destroy(() => { console.log('gpio destroyed') })
   process.exit(2);
 });
