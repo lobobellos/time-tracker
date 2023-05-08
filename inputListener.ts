@@ -26,7 +26,6 @@ gpio.on('change', async rpipin => {
     //clock in
     console.log('clock in')
     clockedIn.set(lastPin, Date.now())
-
   }else if (rpipin == 11) {
     //clock out
     console.log('clock out')
@@ -35,20 +34,26 @@ gpio.on('change', async rpipin => {
       //@ts-ignore
       
     }
-    await writeData(
-      (await getRawData())
-      .map(el=>el[0] == lastPin ?
+    
+    let data = (await getRawData())
+    console.log("old data",data)
+    data = data.map(el=>el[0] == lastPin ?
+      [
+        el[0],
+        el[1],
+        el[2],
         [
-          el[0],
-          el[1],
-          el[2],
-          [
-            ...el[3],
-            [<number>clockedIn.get(lastPin), Date.now()],
-          ],
-        ]: el
-      )
+          ...el[3],
+          [<number>clockedIn.get(lastPin), Date.now()],
+        ],
+      ]: el
     )
+    console.log("new data",data)
+    await writeData(data)
+    
+    console.log("clocked in")
+    console.log(clockedIn.entries())
+
   }
 })
 
