@@ -43,6 +43,7 @@ export class User {
     this.h = this.sumTime % 24;
     this.sumTime = Math.floor(this.sumTime / 24)
     this.d = this.sumTime;
+    this.sumTime = temp
     this.sumTimeString = ` ${this.d} days, ${this.h} hours, ${this.m} mins`
   }
 
