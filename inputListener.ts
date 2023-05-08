@@ -1,5 +1,5 @@
 import gpio from 'rpi-gpio'
-import { getRawData, writeData } from './src/dataManager'
+import { getRawData, writeData } from './src/dataManager.js'
 
 await gpio.promise.setup(7, gpio.DIR_IN, gpio.EDGE_RISING)
 
