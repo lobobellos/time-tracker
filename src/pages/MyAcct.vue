@@ -1,4 +1,5 @@
 <template>
+  your account
   <h1>{{ user }}</h1>
 </template>
 
@@ -7,13 +8,16 @@ import cookie from 'js-cookie'
 
 
 export default {
+  name:"my account",
   data(){
     return {
       user: null,
     }
   },
-  onMount(){
+  created(){
     this.user = cookie.get("user")
+
+    alert(this.user)
   }
 }
 

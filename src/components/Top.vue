@@ -9,6 +9,9 @@
     <div class="item">
       <router-link to="/lookByDay">Specific day data</router-link>
     </div>
+    <div class="item">
+      <router-link to="/myAcct">my account</router-link>
+    </div>
   </div>
 </template>
 
