@@ -3,7 +3,6 @@ import {createRouter, createWebHistory} from 'vue-router'
 import './style.css'
 import App from './App.vue'
 
-
 import CreateAcct from './pages/CreateAcct.vue'
 import Home from './pages/Home.vue'
 import LookByDay from './pages/LookByDay.vue'
@@ -21,7 +20,7 @@ const router = createRouter({
   routes,
 })
 
-let app = createApp(App)
+const app = createApp(App)
 app.use(router)
 
 app.mount('#app')
