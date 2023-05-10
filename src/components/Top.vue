@@ -12,6 +12,9 @@
     <div class="item">
       <router-link to="/myAcct">my account</router-link>
     </div>
+    <div class="item">
+      <router-link to="/login">Login</router-link>
+    </div>
   </div>
 </template>
 
