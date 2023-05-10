@@ -7,11 +7,13 @@ import App from './App.vue'
 import CreateAcct from './pages/CreateAcct.vue'
 import Home from './pages/Home.vue'
 import LookByDay from './pages/LookByDay.vue'
+import MyAcct from './pages/MyAcct.vue'
 
 const routes = [
  {path:'/', component: Home},
  {path:'/createAcct', component: CreateAcct},
  {path:'/lookByDay', component: LookByDay},
+ {path:'/myAcct', component: MyAcct},
 ]
 
 const router = createRouter({
