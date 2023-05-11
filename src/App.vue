@@ -5,12 +5,14 @@
 <template>
   <div class="container">
     <Top/>
-    <router-view id="router-view"></router-view>
+    <div class="router-container">
+      <router-view ></router-view>
+    </div>
   </div>
 </template>
 
 <style scoped>
-#router-view{
+.router-container{
   margin-left: 1rem;
   margin-right: 1rem;
 }
