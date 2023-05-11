@@ -34,9 +34,6 @@ export default {
   },
   mounted(){
     console.log(this.isLoggedIn)
-    this.$root.$on('login',()=>{
-      this.isLoggedIn = true
-    })
   }
 }
 
