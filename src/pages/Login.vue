@@ -1,6 +1,11 @@
 <template>
-  <input type="number" v-model="userPin"><br>
+  <h1>Login</h1>
+  <form v-on:submit="e=>login(e)"></form>
+  <label for="pin">Pin</label><br>
+  <input type="number" name="pin" placeholder="0000" v-model="userPin"><br>
   <button v-on:click="login">login</button>
+
+  <p>No account? <router-link to="/createAcct">create one</router-link></p>
 </template>
 
 
@@ -17,12 +22,10 @@ export default{
   },
   created(){
     this.userPIN = Cookies.get("pin")
-
-
   },
   methods:{
-    async login(){
-      console.log(this.userPin)
+    async login(e:Event){
+      e.preventDefault()
       const data = await fetch('/login',{
         method: 'POST',
         headers:[
@@ -32,13 +35,18 @@ export default{
           pin: this.userPin
         })
       })
-
-      let json:{data:UserData,found:boolean} = await data.json()
+      const json:{data:UserData,found:boolean} = await data.json()
       if(json.found){
         alert("login successful. Welcome " + json.data[1])
         this.userData = json.data
+      }else{
+        alert("invalid pin")
       }
     }
   }
 }
 </script>
+
+<style scoped>
+
+</style>
