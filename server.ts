@@ -48,6 +48,7 @@ app.post('/create', async (req, res) => {
     await addUser(req.body.pin, req.body.name, req.body.title);
     res.sendStatus(201);
   } catch (err) {
+    console.log(err);
     res.status(400)
     res.send(err);
   }

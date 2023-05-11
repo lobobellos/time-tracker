@@ -1,11 +1,11 @@
 <template>
-  <h1>account creation</h1>
+  <h1>Account Creation</h1>
 
   <form type="POST" v-on:submit="e=>submitForm(e)">
-    <label for="name">name (preferably your real one)</label><br>
+    <label for="name">Name (preferably your real one)</label><br>
     <input type="text" name="name" v-model="name" required /><br>
     
-    <label for="title">title (your job on the team)</label><br>
+    <label for="title">Title (your job on the team)</label><br>
     <input type="text" name="title" v-model="title" required /><br>
     
     <label for="pin">pin</label><br>
@@ -16,6 +16,8 @@
 
     <input type="submit" value="submit">
   </form>
+
+  <p>Already have an account? <router-link to="/login">login</router-link></p>
 </template>
 
 
@@ -60,9 +62,6 @@ export default {
 
 <style scoped>
 
-  form{
-    background-color: rgb(181, 115, 211);
-    padding: 2rem;
-  }
+
 
 </style>
