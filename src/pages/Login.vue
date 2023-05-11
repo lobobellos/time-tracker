@@ -39,6 +39,7 @@ export default{
       if(json.found){
         alert("login successful. Welcome " + json.data[1])
         this.userData = json.data
+        this.$router.push('/myAcct');
       }else{
         alert("invalid pin")
       }
