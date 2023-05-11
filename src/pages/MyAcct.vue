@@ -1,9 +1,16 @@
 <template>
-  your account
-  <h1>pin: {{ pin }}</h1>
-
-
-  user Info:{{ userInfo }}
+  <div v-if="isLoggedIn" class="container">
+  
+    <h1>My Account</h1>
+    <h3>pin: {{ pin }}</h3>
+  
+  
+    user Info:{{ userInfo }}
+  </div>
+  <div class="container" v-else>
+    
+    <h2>You need to <router-link to="/login">login</router-link> to have an account page, silly</h2>
+  </div>
 </template>
 
 <script lang ="ts">
@@ -15,10 +22,13 @@ export default {
     return {
       pin: null,
       userInfo:null,
+      isLoggedIn:false
     }
   },
   created(){
-    this.pin = cookie.get("pin")
+    this.isLoggedIn = cookie.get("pin") != undefined
+
+    this.pin =cookie.get("pin")
     this.getData()
   },
   methods:{
