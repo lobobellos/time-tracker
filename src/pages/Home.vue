@@ -36,7 +36,7 @@ export default {
 
 <style scoped>
 h1 {
-  font-family: 'Fira Sans', sans-serif;
+  font-weight: bold;
 }
 
 .container {
