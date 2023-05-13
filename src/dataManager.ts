@@ -99,6 +99,16 @@ export async function addUser(pin: number, name: string, title: string) {
   ])
 }
 
+export async function getUser(pin: number) {
+  return (await getRawData()).find(el => el[0] == pin)
+}
+
+export async function setUser(userdata:UserData) {
+  writeData(
+    (await getRawData()).map(el => el[0] == userdata[0] ? userdata : el)
+  )
+}
+
 export async function deleteUser(pin: number) {
   writeData(
     (await getRawData()).filter(el => el[0] != pin)
