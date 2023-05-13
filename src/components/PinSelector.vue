@@ -2,22 +2,25 @@
   <div class="lightbox" v-if="showLightbox">
     <div class="lightbox-content">
       <h2>Pin Change</h2>
-      <div class="form">
+      <form class="form" @submit.prevent="handleSubmit">
         <label for="currPin">Current pin</label>
-        <input type="number" id="currPin" v-model="curentPin" />
+        <input type="number" id="currPin" v-model.number="curentPin"  required/>
         <label for="newpin">New Pin</label>
-        <input type="password" id="newpin" v-model="newPin" name="pin" />
+        <input type="password" id="newpin" v-model.number="newPin" name="pin" required/>
         <div class="escapeOptions">
-          <button @click="handleSubmit">Submit</button>
+          <button type="submit" >Submit</button>
           <button @click="handleCancel">Cancel</button>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-
+export interface PinData {
+  currPin: number,
+  newPin: number
+}
 export default {
   name: "pinSelector",
   props: {
@@ -30,14 +33,15 @@ export default {
   },
   data() {
     return {
-      curentPin: null,
-      newPin : null
+      curentPin:<number> null,
+      newPin :<number> null
     }
   },
   methods: {
-    handleSubmit() {
-      this.$emit('submit', {
-        curentPin: this.curentPin,
+    handleSubmit(e:Event) {
+      e.preventDefault();
+      this.$emit('data', <PinData>{
+        currPin: this.curentPin,
         newPin: this.newPin,
       });
       this.clearFields();

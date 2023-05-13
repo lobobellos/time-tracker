@@ -3,7 +3,7 @@ import express from 'express';
 import * as url from 'url';
 import path from 'node:path';
 import chalk from 'chalk';
-import { addUser, getRawData, getUser, setUser } from './src/dataManager.js';
+import { addUser, changeUserPin, getRawData, getUser, setUser } from './src/dataManager.js';
 import { createServer as createViteServer } from 'vite'
 
 let app = express();
@@ -64,10 +64,23 @@ app.post("/getUser", async (req, res) => {
 })
 
 app.post("/setUser", async (req, res) => {
+  console.log(req.body);
   try {
-    await setUser(req.body);
+    await setUser( req.body.data);
     res.sendStatus(201);
   } catch (err) {
+    console.log(err);
+    res.status(400)
+    res.send(err);
+  }
+})
+
+app.post("/changePin", async (req, res) => {
+  console.log(req.body);
+  try{
+    await changeUserPin(req.body.pin, req.body.newPin);
+    res.sendStatus(201);
+  }catch(err){
     console.log(err);
     res.status(400)
     res.send(err);

@@ -16,12 +16,12 @@
     <h2>You need to <router-link to="/login">login</router-link> to have an account page, silly</h2>
   </div>
 
-  <PinSelector :pin="pin" :show-lightbox="showLightBox" @submit="handleLightboxSubmit" @cancel="handleLightboxCancel" />
+  <PinSelector :pin="pin" :show-lightbox="showLightBox" @data="handleLightboxSubmit" @cancel="handleLightboxCancel" />
 </template>
 
 <script lang ="ts">
-import cookie from 'js-cookie'
-import PinSelector from '../components/PinSelector.vue'
+import Cookies from 'js-cookie'
+import PinSelector, { PinData } from '../components/PinSelector.vue'
 import type { UserData } from '../dataManager.js'
 
 export default {
@@ -32,59 +32,75 @@ export default {
   data() {
     return {
       isLoggedIn: false,
-      pin: <number>null,
-      userInfo:<UserData> null,
+      userInfo: <UserData>null,
       showLightBox: false
+    }
+  },
+  computed: {
+    pin() {
+      return parseInt(Cookies.get("pin"))
     }
   },
   methods: {
     requestPinChange() {
       this.showLightBox = true
     },
-    handleLightboxSubmit(e) {
+    async handleLightboxSubmit(e: PinData) {
       this.showLightBox = false
-      this.sendPinChange(e.newPin)
+      if (e.currPin == e.newPin) {
+        alert("Pin cannot be the same")
+      }else if (e.currPin != this.pin){
+        alert("current pin incorrect")
+      }else{
+        fetch('/changePin', {
+        method: 'POST',
+        headers: [
+          ['Content-Type', 'application/json'],
+        ],
+        body: JSON.stringify({
+          pin: this.pin,
+          newPin: e.newPin
+        })
+      })
+      .then(async res =>{
+        if(res.ok) {
+          Cookies.set("pin", e.newPin.toString())
+          this.getUserInfo()
+        }else{
+          alert("something went wrong"+await res.text())
+        }
+      })
+      }
     },
     handleLightboxCancel() {
       this.showLightBox = false
       console.log("cancelled")
     },
     async sendPinChange(newPin: number) {
-      fetch('/setUser', {
-        method: 'POST',
-        headers: [
-          ['Content-Type', 'application/json'],
-        ],
-        body: JSON.stringify({
-          pin:this.pin,
-          data:<UserData>[
-            newPin,
-            this.userInfo[1],
-            this.userInfo[2],
-            this.userInfo[3]
-          ]
-        })
-      })
+      
+      await this.getUserInfo()
+    },
+    async getUserInfo() {
+      if (this.pin != undefined) {
+        const fetched: { data: UserData, found: boolean } = (await fetch('/getUser', {
+          method: 'POST',
+          headers: [
+            ['Content-Type', 'application/json'],
+          ],
+          body: JSON.stringify({
+            pin: parseInt(this.pin)
+          })
+        }).then(res => res.json()))
+    
+        this.userInfo = fetched.data
+        this.isLoggedIn = fetched.found
+      } else {
+        this.isLoggedIn = false
+      }
     }
   },
   async created() {
-    this.pin = cookie.get("pin")
-    if (this.pin != undefined) {
-      const fetched: { data: UserData, found: boolean } = (await fetch('/getUser', {
-        method: 'POST',
-        headers: [
-          ['Content-Type', 'application/json'],
-        ],
-        body: JSON.stringify({
-          pin: parseInt(this.pin)
-        })
-      }).then(res => res.json()))
-
-      this.userInfo = fetched.data
-      this.isLoggedIn = fetched.found
-    } else {
-      this.isLoggedIn = false
-    }
+    await this.getUserInfo()
   }
 }
 

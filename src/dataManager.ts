@@ -103,9 +103,24 @@ export async function getUser(pin: number) {
   return (await getRawData()).find(el => el[0] == pin)
 }
 
-export async function setUser(userdata:UserData) {
+export async function setUser( userdata:UserData) {
+  let data = await getRawData()
+  if (data.find(el => el[1] == userdata[1])) {
+    throw `Name ${userdata[1]} already exists.`
+  }
+  console.log('writing new data')
   writeData(
-    (await getRawData()).map(el => el[0] == userdata[0] ? userdata : el)
+    data.map(el => el[0] == userdata[0] ? userdata : el)
+  )
+}
+
+export async function changeUserPin(pin: number, newPin: number) {
+  let data = await getRawData()
+  if (data.find(el => el[0] == newPin)) {
+    throw `Pin ${newPin} already exists.`
+  }
+  writeData(
+    (await getRawData()).map(el => el[0] == pin ? [newPin, el[1], el[2], el[3]] : el)
   )
 }
 
@@ -136,3 +151,4 @@ export const exampleData: privateUserData[] = [
   ["Michael", "Drive Team Captain", [[0, 6000000]]],
   ["Rebecca", "Team Captain", [[1683496997868, 1683497997868]]],
 ]
+
