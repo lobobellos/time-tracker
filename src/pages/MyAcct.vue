@@ -32,8 +32,8 @@ export default {
   data() {
     return {
       isLoggedIn: false,
-      pin: 0,
-      userInfo: null,
+      pin: <number>null,
+      userInfo:<UserData> null,
       showLightBox: false
     }
   },
@@ -43,20 +43,26 @@ export default {
     },
     handleLightboxSubmit(e) {
       this.showLightBox = false
-      console.log(e)
+      this.sendPinChange(e.newPin)
     },
     handleLightboxCancel() {
       this.showLightBox = false
       console.log("cancelled")
     },
-    async sendPinChange() {
+    async sendPinChange(newPin: number) {
       fetch('/setUser', {
         method: 'POST',
         headers: [
           ['Content-Type', 'application/json'],
         ],
         body: JSON.stringify({
-          
+          pin:this.pin,
+          data:<UserData>[
+            newPin,
+            this.userInfo[1],
+            this.userInfo[2],
+            this.userInfo[3]
+          ]
         })
       })
     }
