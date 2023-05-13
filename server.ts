@@ -3,7 +3,7 @@ import express from 'express';
 import * as url from 'url';
 import path from 'node:path';
 import chalk from 'chalk';
-import { addUser, getRawData } from './src/dataManager.js';
+import { addUser, getRawData, getUser, setUser } from './src/dataManager.js';
 import { createServer as createViteServer } from 'vite'
 
 let app = express();
@@ -46,6 +46,26 @@ app.post("/login", async (req, res) => {
 app.post('/create', async (req, res) => {
   try {
     await addUser(req.body.pin, req.body.name, req.body.title);
+    res.sendStatus(201);
+  } catch (err) {
+    console.log(err);
+    res.status(400)
+    res.send(err);
+  }
+})
+
+app.post("/getUser", async (req, res) => {
+  res.type("json");
+  let data = await getUser(req.body.pin); 
+  res.send({
+    data,
+    found: data !== undefined
+  })
+})
+
+app.post("/setUser", async (req, res) => {
+  try {
+    await setUser(req.body);
     res.sendStatus(201);
   } catch (err) {
     console.log(err);
