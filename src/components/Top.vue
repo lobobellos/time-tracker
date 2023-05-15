@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-if="width > 600">
+  <div class="containerSpread" v-if="width > 600">
     <router-link to="/">
       <img src="../assets/teamLogo.png" alt="team logo" id="logo">
     </router-link>
@@ -62,10 +62,15 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.containerSpread , .container {
   display: flex;
   flex-direction: row;
   background-color: rgb(165, 109, 218);
+}
+
+.containerSpread a {
+  margin-left:0.4rem;
+  margin-right:0.4rem;
 }
 
 .dropdown {
