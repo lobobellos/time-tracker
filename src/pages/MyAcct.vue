@@ -29,7 +29,8 @@
 
 <script lang ="ts">
 import Cookies from 'js-cookie'
-import PinSelector, {type PinData } from '../components/PinSelector.vue'
+import PinSelector from '../components/PinSelector.vue'
+import type { PinData } from '../components/PinSelector.vue.js'
 import type { UserData } from '../dataManager.js'
 
 export default {
