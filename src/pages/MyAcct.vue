@@ -7,8 +7,16 @@
     <br>
     user Info:{{ userInfo }}
     <br>
-    <label for="changeTitle">change title</label>
-    <input type="text" id="changeTitle" v-model="userInfo[2]" />
+    <div class="changeSomething">
+      <label for="changeTitle">Change Name</label>
+      <input type="text" id="changeTitle" v-model="userInfo[1]" />
+      <button>change</button>
+    </div>
+    <div class="changeSomething">
+      <label for="changeTitle">change title</label>
+      <input type="text" id="changeTitle" v-model="userInfo[2]" />
+      <button>change</button>
+    </div>
 
   </div>
   <div class="container" v-else>
@@ -105,3 +113,9 @@ export default {
 }
 
 </script>
+
+<style scoped>
+.changeSomething {
+  margin-top:1rem;
+}
+</style>
