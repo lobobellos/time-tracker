@@ -3,7 +3,7 @@ import express from 'express';
 import * as url from 'url';
 import path from 'node:path';
 import chalk from 'chalk';
-import { addUser, changeUserPin, getRawData, getUser, setUser } from './src/dataManager.js';
+import { addUser, changeName, changeTitle, changeUserPin, getRawData, getUser } from './src/dataManager.js';
 import { createServer as createViteServer } from 'vite'
 
 let app = express();
@@ -63,10 +63,39 @@ app.post("/getUser", async (req, res) => {
   })
 })
 
-app.post("/setUser", async (req, res) => {
+export interface changeNameInfo{
+  body:{
+    pin: number
+    newName: string
+  }
+}
+
+export interface changeTitleInfo{
+  body:{
+    pin: number;
+    newTitle: string;
+  }
+}
+
+
+
+app.post("/changePin", async (req, res) => {
   console.log(req.body);
+  try{
+    await changeUserPin(req.body.pin, req.body.newPin);
+    res.sendStatus(201);
+  }catch(err){
+    console.log(err);
+    res.status(400)
+    res.send(err);
+  }
+})
+
+app.post("/changeName", async (req:changeNameInfo, res) => {
+  console.log(req.body);
+
   try {
-    await setUser( req.body.data);
+    await changeName(req.body.pin, req.body.newName);
     res.sendStatus(201);
   } catch (err) {
     console.log(err);
@@ -75,12 +104,13 @@ app.post("/setUser", async (req, res) => {
   }
 })
 
-app.post("/changePin", async (req, res) => {
+app.post("/changeTitle", async (req:changeTitleInfo, res) => {
   console.log(req.body);
-  try{
-    await changeUserPin(req.body.pin, req.body.newPin);
+
+  try {
+    await changeTitle(req.body.pin, req.body.newTitle);
     res.sendStatus(201);
-  }catch(err){
+  } catch (err) {
     console.log(err);
     res.status(400)
     res.send(err);

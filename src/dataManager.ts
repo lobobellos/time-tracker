@@ -103,14 +103,36 @@ export async function getUser(pin: number) {
   return (await getRawData()).find(el => el[0] == pin)
 }
 
-export async function setUser( userdata:UserData) {
+
+
+export async function changeName(pin: number, newName: string) {
   let data = await getRawData()
-  if (data.find(el => el[1] == userdata[1])) {
-    throw `Name ${userdata[1]} already exists.`
+  if (data.find(el => el[1] == newName)) {
+    throw `Name ${newName} already exists.`
   }
-  console.log('writing new data')
+  if(!data.find(el => el[0] == pin)) {
+    throw `Name ${pin} does not exist`
+  }
+  console.log('writing new name')
   writeData(
-    data.map(el => el[0] == userdata[0] ? userdata : el)
+    data.map(el => el[0] == pin ? 
+      [el[0], newName, el[2], el[3] ]:
+      el
+    )
+  )
+}
+export async function changeTitle(pin: number, newTitle: string) {
+  let data = await getRawData()
+
+  if(!data.find(el => el[0] == pin)) {
+    throw `Name ${pin} does not exist`
+  }
+  console.log('writing new name')
+  writeData(
+    data.map(el => el[0] == pin ? 
+      [el[0], el[1], newTitle, el[3] ]:
+      el
+    )
   )
 }
 
