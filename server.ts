@@ -29,12 +29,12 @@ app.post("/login", async (req, res) => {
   res.type("json");
   const data = (await getRawData())
     .find(el => el[0] == req.body.pin)
-    
+
   if (!data) {
     res.send(JSON.stringify({
-      found: false 
-    })) 
-  }else{
+      found: false
+    }))
+  } else {
     res.cookie("pin", req.body.pin);
     res.send(JSON.stringify({
       data,
@@ -56,42 +56,36 @@ app.post('/create', async (req, res) => {
 
 app.post("/getUser", async (req, res) => {
   res.type("json");
-  let data = await getUser(req.body.pin); 
+  let data = await getUser(req.body.pin);
   res.send({
     data,
     found: data !== undefined
   })
 })
 
-export interface changeNameInfo{
-  body:{
-    pin: number
-    newName: string
-  }
+export interface changeNameInfo {
+  pin: number
+  newName: string
 }
 
-export interface changeTitleInfo{
-  body:{
-    pin: number;
-    newTitle: string;
-  }
+export interface changeTitleInfo {
+  pin: number;
+  newTitle: string;
 }
-
-
 
 app.post("/changePin", async (req, res) => {
   console.log(req.body);
-  try{
+  try {
     await changeUserPin(req.body.pin, req.body.newPin);
     res.sendStatus(201);
-  }catch(err){
+  } catch (err) {
     console.log(err);
     res.status(400)
     res.send(err);
   }
 })
 
-app.post("/changeName", async (req:changeNameInfo, res) => {
+app.post("/changeName", async (req: { body: changeNameInfo }, res) => {
   console.log(req.body);
 
   try {
@@ -104,7 +98,7 @@ app.post("/changeName", async (req:changeNameInfo, res) => {
   }
 })
 
-app.post("/changeTitle", async (req:changeTitleInfo, res) => {
+app.post("/changeTitle", async (req: { body: changeTitleInfo }, res) => {
   console.log(req.body);
 
   try {

@@ -8,16 +8,16 @@
     <button @click="requestPinChange">change pin</button>
 
 
-    <div class="changeSomething">
+    <form class="changeSomething" @click.prevent="changeName">
       <label for="changeTitle">Change Name</label>
       <input type="text" id="changeTitle" v-model="newName" :placeholder="userInfo[1]" />
-      <button>change</button>
-    </div>
-    <div class="changeSomething">
+      <button type="submit">change</button>
+    </form>
+    <form class="changeSomething" @click.prevent="changeTitle">
       <label for="changeTitle">Change Title</label>
       <input type="text" id="changeTitle" v-model="newTitle" :placeholder="userInfo[2]" />
-      <button>change</button>
-    </div>
+      <button type="submit" >change</button>
+    </form>
 
   </div>
   <div class="container" v-else>
@@ -43,7 +43,9 @@
 import Cookies from 'js-cookie'
 import PinSelector from '../components/PinSelector.vue'
 import type { PinData } from '../components/PinSelector.vue.js'
-import type { UserData } from '../dataManager.js'
+import { UserData, changeName, changeTitle } from '../dataManager.js'
+import type {changeNameInfo, changeTitleInfo} from '../../server.js'
+import { onMounted } from 'vue'
 
 export default {
   name: "my account",
@@ -115,9 +117,28 @@ export default {
         headers: [
           ['Content-Type', 'application/json'],
         ],
-        body: JSON.stringify({
-          
+        body: JSON.stringify(<changeNameInfo>{
+          pin:this.pin,
+          newName:this.newName
         })
+      })
+      .then(async res=>{
+        alert(res.ok?"name changed successfully":await res.text())
+      })
+    },
+    async changeTitle(){
+      fetch('/changeTitle', {
+        method: 'POST',
+        headers: [
+          ['Content-Type', 'application/json'],
+        ],
+        body: JSON.stringify(<changeTitleInfo>{
+          pin:this.pin,
+          newTitle:this.newTitle
+        })
+      })
+      .then(async res=>{
+        alert(res.ok?"title changed successfully":await res.text())
       })
     },
     async getUserInfo() {
@@ -137,7 +158,10 @@ export default {
       } else {
         this.isLoggedIn = false
       }
-    }
+    },
+  },
+  async mounted(){
+    await this.getUserInfo()
   },
   async created() {
     await this.getUserInfo()
