@@ -1,9 +1,11 @@
+import dotenv from 'dotenv'
+dotenv.config()
 
 import express from 'express';
 import * as url from 'url';
 import path from 'node:path';
 import chalk from 'chalk';
-import { addUser, changeName, changeTitle, changeUserPin, getRawData, getUser } from './src/dataManager.js';
+import { addUser, changeName, changeTitle, changeUserPin, getRawData, getUser, privateUserData } from './src/dataManager.js';
 import { createServer as createViteServer } from 'vite'
 
 let app = express();
@@ -20,7 +22,7 @@ app.use(express.json());
 
 app.get("/data", async (req, res) => {
   res.type("json");
-  res.send(await getRawData());
+  res.send(<privateUserData[]>(await getRawData()).map(el=>el.splice(1)));
 });
 
 app.post("/login", async (req, res) => {
@@ -109,6 +111,10 @@ app.post("/changeTitle", async (req: { body: changeTitleInfo }, res) => {
     res.status(400)
     res.send(err);
   }
+})
+
+app.post('/isAdminPassword',async (req, res) => {
+  res.send(req.body.password == process.env.ADMIN_PASSWORD)
 })
 
 app.get("*", (req, res) => {
