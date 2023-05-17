@@ -3,17 +3,13 @@
 
     <h1>Hello, {{ userInfo[1] }}</h1>
     <h4>{{ userInfo[2] }}</h4>
-
-
     <button @click="requestPinChange">change pin</button>
-
-
-    <form class="changeSomething" @click.prevent="changeName">
+    <form class="changeSomething" @submit.prevent="changeName">
       <label for="changeTitle">Change Name</label>
       <input type="text" id="changeTitle" v-model="newName" :placeholder="userInfo[1]" />
       <button type="submit">change</button>
     </form>
-    <form class="changeSomething" @click.prevent="changeTitle">
+    <form class="changeSomething" @submit.prevent="changeTitle">
       <label for="changeTitle">Change Title</label>
       <input type="text" id="changeTitle" v-model="newTitle" :placeholder="userInfo[2]" />
       <button type="submit" >change</button>
@@ -25,16 +21,14 @@
     <h2>You need to <router-link to="/login">login</router-link> to have an account page, silly</h2>
   </div>
 
-  <h3>Top 5 times</h3><br>
+  <h3>Top Times</h3><br>
   <div class="times">
     <div class="time" v-for="time in topTimes">
-
       <h3>{{ time[0] }}</h3>
-
       <h5>{{ time[1] }}</h5>
-      
     </div>
   </div>
+  <button @click="showAllTimes">Show All</button>
 
   <PinSelector :pin="pin" :show-lightbox="showLightBox" @data="handleLightboxSubmit" @cancel="handleLightboxCancel" />
 </template>
@@ -43,9 +37,8 @@
 import Cookies from 'js-cookie'
 import PinSelector from '../components/PinSelector.vue'
 import type { PinData } from '../components/PinSelector.vue.js'
-import { UserData, changeName, changeTitle } from '../dataManager.js'
+import { UserData } from '../dataManager.js'
 import type {changeNameInfo, changeTitleInfo} from '../../server.js'
-import { onMounted } from 'vue'
 
 export default {
   name: "my account",
@@ -58,7 +51,8 @@ export default {
       newTitle: "",
       isLoggedIn: false,
       userInfo: <UserData>null,
-      showLightBox: false
+      showLightBox: false,
+      numTimesShown: 15,
     }
   },
   computed: {
@@ -66,10 +60,11 @@ export default {
       return parseInt(Cookies.get("pin"))
     },
     topTimes() {
-      return (<UserData>this.userInfo)[3]
+      return !this.userInfo ? []:
+      (<UserData>this.userInfo)[3]
         .map(time=>[...time,time[1]-time[0]])
         .sort((a,b)=>b[2]-a[2])
-        .slice(0,5)
+        .slice(0,this.numTimesShown)
         .map(time=>[
           new Date(time[0]).toLocaleDateString(),
           `total time: ${(time[2]/(1000*60*60)).toFixed(2)} hours`
@@ -124,7 +119,9 @@ export default {
       })
       .then(async res=>{
         alert(res.ok?"name changed successfully":await res.text())
+        this.getUserInfo()
       })
+      this.clearInputs()
     },
     async changeTitle(){
       fetch('/changeTitle', {
@@ -139,7 +136,9 @@ export default {
       })
       .then(async res=>{
         alert(res.ok?"title changed successfully":await res.text())
+        this.getUserInfo()
       })
+      this.clearInputs()
     },
     async getUserInfo() {
       if (this.pin != undefined) {
@@ -159,9 +158,17 @@ export default {
         this.isLoggedIn = false
       }
     },
+    showAllTimes() {
+      this.numTimesShown = Infinity
+    },
+    clearInputs() {
+      this.newName = ""
+      this.newTitle = ""
+    }
   },
   async mounted(){
     await this.getUserInfo()
+    console.log("mounted")
   },
   async created() {
     await this.getUserInfo()
@@ -177,7 +184,18 @@ export default {
 
 .times {
  display:flex; 
- flex-direction:column;
+ flex-direction:row;
  flex-wrap: wrap;
+ justify-content: center;
+}
+
+.time{
+  font-family: 'Fira sans';
+  text-align: center;
+  color: white;
+  background-color: blueviolet;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 1rem;
 }
 </style>
