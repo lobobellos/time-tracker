@@ -16,9 +16,14 @@ type timestamp = number
 let lastPin: null | number = null
 let clockedIn = new Map<pin, timestamp>()
 
+let pressedRecently = false;
+
 console.log(chalk.blueBright("starting inputListener"))
 
 gpio.on('change', async rpipin => {
+  if(pressedRecently) return;
+  pressedRecently =true
+  setTimeout(()=>pressedRecently = false, 500)
   console.log(`pin ${rpipin} pressed`)
   if (lastPin == null) return
   if (rpipin == 7) {
