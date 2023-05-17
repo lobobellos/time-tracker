@@ -55,7 +55,7 @@ export default {
       this.rotateImage()
     },
     rotateImage() {
-      this.dropdown.rotation = this.dropdown.rotation == 0 ? -90 : 0
+      this.dropdown.rotation = 90 - this.dropdown.rotation
     }
   },
 }
