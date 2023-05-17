@@ -1,6 +1,6 @@
 <template>
   <h2>Admin</h2>
-  <label for="adminPass">admin password</label>
+  <label for="adminPass">admin password</label><br>
   <input name="adminPass" type="password" v-model="adminPass">
 
   <div v-if="adminPass != ''">
@@ -37,6 +37,7 @@ export default {
 textarea{
   width:calc(100% - 4rem);
   height: fit-content;
+  margin-top:1rem;
   margin-left: 2rem;
   margin-right: 2rem;
 }
