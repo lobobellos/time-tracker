@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="dropdown" v-if="dropdown.isOpen">
-      <router-link to="/lookByDay">Specific data</router-link>
+      <router-link to="/admin">Admin</router-link>
       <router-link v-if="!isLoggedIn" to="/createAcct">Create Account</router-link>
       <router-link v-if="!isLoggedIn" to="/login">Log in</router-link>
       <router-link v-else to="/myAcct">My Account</router-link>
