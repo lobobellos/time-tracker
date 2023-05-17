@@ -3,16 +3,16 @@
 
     <h1>Hello, {{ userInfo[1] }}</h1>
     <h4>{{ userInfo[2] }}</h4>
-    <button @click="requestPinChange">change pin</button>
+    <button @click="requestPinChange" id="changePin">Change Pin</button>
     <form class="changeSomething" @submit.prevent="changeName">
       <label for="changeTitle">Change Name</label>
       <input type="text" id="changeTitle" v-model="newName" :placeholder="userInfo[1]" />
-      <button type="submit">change</button>
+      <button type="submit">Change</button>
     </form>
     <form class="changeSomething" @submit.prevent="changeTitle">
       <label for="changeTitle">Change Title</label>
       <input type="text" id="changeTitle" v-model="newTitle" :placeholder="userInfo[2]" />
-      <button type="submit" >change</button>
+      <button type="submit" >Change</button>
     </form>
 
   </div>
@@ -178,8 +178,58 @@ export default {
 </script>
 
 <style scoped>
+
+.container h1{
+  margin-bottom:0
+}
+
+.container h4{
+  margin-top:0.25rem;
+}
+
 .changeSomething {
   margin-top:1rem;
+  display: flex;
+  flex-direction: row;
+}
+
+.changeSomething * {
+  margin-left:0.2rem;
+  margin-right:0.2rem;
+}
+
+#changePin{
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+button{
+  font-family:'Fira sans';
+  font-weight:600;
+  background-color: #a56dda;
+  border:0px;
+  border-radius: 0.5rem;
+  background-image: linear-gradient(to top, blueviolet 50%, #a56dda 50%); /* Set gradient to new color */
+  background-size: 100% 200%; /* Set size of gradient */
+  transition: background-position 0.3s; /* Set transition duration */
+}
+
+button:hover{
+  background-position: 0 -100%; /* Move gradient upwards */
+}
+
+.changeSomething label{
+  margin-left:0;
+}
+
+.changeSomething input{
+  background-color: #c3a6df;
+  border:2px solid blueviolet;
+  border-radius: 0.3rem;
+}
+
+.changeSomething input::placeholder{
+  color:rgb(85, 85, 85);
 }
 
 .times {
