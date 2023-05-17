@@ -22,6 +22,8 @@
 
 
 <script lang="ts">
+import Cookies from 'js-cookie'
+
 export default {
   name: 'CreateAcct',
   data(){
@@ -53,6 +55,11 @@ export default {
         alert(res.ok?
         "account created" :
         await res.text())
+
+        if(res.ok){
+          Cookies.set('pin', this.pin.toString())
+          this.$router.push('/login')
+        }
       })
     }
   },

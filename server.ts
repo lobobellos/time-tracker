@@ -3,7 +3,7 @@ import express from 'express';
 import * as url from 'url';
 import path from 'node:path';
 import chalk from 'chalk';
-import { addUser, getRawData } from './src/dataManager.js';
+import { addUser, changeName, changeTitle, changeUserPin, getRawData, getUser } from './src/dataManager.js';
 import { createServer as createViteServer } from 'vite'
 
 let app = express();
@@ -29,12 +29,12 @@ app.post("/login", async (req, res) => {
   res.type("json");
   const data = (await getRawData())
     .find(el => el[0] == req.body.pin)
-    
+
   if (!data) {
     res.send(JSON.stringify({
-      found: false 
-    })) 
-  }else{
+      found: false
+    }))
+  } else {
     res.cookie("pin", req.body.pin);
     res.send(JSON.stringify({
       data,
@@ -46,6 +46,63 @@ app.post("/login", async (req, res) => {
 app.post('/create', async (req, res) => {
   try {
     await addUser(req.body.pin, req.body.name, req.body.title);
+    res.sendStatus(201);
+  } catch (err) {
+    console.log(err);
+    res.status(400)
+    res.send(err);
+  }
+})
+
+app.post("/getUser", async (req, res) => {
+  res.type("json");
+  let data = await getUser(req.body.pin);
+  res.send({
+    data,
+    found: data !== undefined
+  })
+})
+
+export interface changeNameInfo {
+  pin: number
+  newName: string
+}
+
+export interface changeTitleInfo {
+  pin: number;
+  newTitle: string;
+}
+
+app.post("/changePin", async (req, res) => {
+  console.log(req.body);
+  try {
+    await changeUserPin(req.body.pin, req.body.newPin);
+    res.sendStatus(201);
+  } catch (err) {
+    console.log(err);
+    res.status(400)
+    res.send(err);
+  }
+})
+
+app.post("/changeName", async (req: { body: changeNameInfo }, res) => {
+  console.log(req.body);
+
+  try {
+    await changeName(req.body.pin, req.body.newName);
+    res.sendStatus(201);
+  } catch (err) {
+    console.log(err);
+    res.status(400)
+    res.send(err);
+  }
+})
+
+app.post("/changeTitle", async (req: { body: changeTitleInfo }, res) => {
+  console.log(req.body);
+
+  try {
+    await changeTitle(req.body.pin, req.body.newTitle);
     res.sendStatus(201);
   } catch (err) {
     console.log(err);

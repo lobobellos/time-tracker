@@ -99,6 +99,53 @@ export async function addUser(pin: number, name: string, title: string) {
   ])
 }
 
+export async function getUser(pin: number) {
+  return (await getRawData()).find(el => el[0] == pin)
+}
+
+
+
+export async function changeName(pin: number, newName: string) {
+  let data = await getRawData()
+  if (data.find(el => el[1] == newName)) {
+    throw `Name ${newName} already exists.`
+  }
+  if(!data.find(el => el[0] == pin)) {
+    throw `Name ${pin} does not exist`
+  }
+  console.log('writing new name')
+  writeData(
+    data.map(el => el[0] == pin ? 
+      [el[0], newName, el[2], el[3] ]:
+      el
+    )
+  )
+}
+export async function changeTitle(pin: number, newTitle: string) {
+  let data = await getRawData()
+
+  if(!data.find(el => el[0] == pin)) {
+    throw `Name ${pin} does not exist`
+  }
+  console.log('writing new name')
+  writeData(
+    data.map(el => el[0] == pin ? 
+      [el[0], el[1], newTitle, el[3] ]:
+      el
+    )
+  )
+}
+
+export async function changeUserPin(pin: number, newPin: number) {
+  let data = await getRawData()
+  if (data.find(el => el[0] == newPin)) {
+    throw `Pin ${newPin} already exists.`
+  }
+  writeData(
+    (await getRawData()).map(el => el[0] == pin ? [newPin, el[1], el[2], el[3]] : el)
+  )
+}
+
 export async function deleteUser(pin: number) {
   writeData(
     (await getRawData()).filter(el => el[0] != pin)
@@ -126,3 +173,4 @@ export const exampleData: privateUserData[] = [
   ["Michael", "Drive Team Captain", [[0, 6000000]]],
   ["Rebecca", "Team Captain", [[1683496997868, 1683497997868]]],
 ]
+
