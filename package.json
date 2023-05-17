@@ -11,7 +11,8 @@
     "start": "node --no-warnings --loader ts-node/esm index.ts",
     "server": "node --no-warnings --loader ts-node/esm server.ts",
     "create-data": "node --no-warnings --loader ts-node/esm scripts/resetData.ts",
-    "inputListen": "node --no-warnings --loader ts-node/esm inputListener.ts"
+    "inputListen": "node --no-warnings --loader ts-node/esm inputListener.ts",
+    "watchData": "node --no-warnings --loader ts-node/esm scripts/watchData.ts"
   },
   "dependencies": {
     "@types/rpi-gpio": "^2.1.1",
