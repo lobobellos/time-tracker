@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 dotenv.config()
+if(process.env.ADMIN_PASSWORD == undefined) throw new Error('ADMIN_PASSWORD is not defined')
 
 import express from 'express';
 import * as url from 'url';
@@ -17,7 +18,6 @@ const vite = await createViteServer({
 })
 
 app.use(vite.middlewares)
-
 app.use(express.json());
 
 app.get("/data", async (req, res) => {
