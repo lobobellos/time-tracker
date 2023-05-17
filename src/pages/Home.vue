@@ -22,14 +22,20 @@ export default {
   name: 'Home',
   data() {
     return {
-      data: null
+      data: <PrivateUser[]>null
     }
   },
-  created() {
+  async created() {
     // watch the params of the route to fetch the data again
-    this.data = exampleData
-        .map(el => new PrivateUser(...<privateUserData>el))
-        .sort((a, b) => b.sumTime - a.sumTime)
+    this.data = (<privateUserData[]>await fetch('/data', {
+      method: 'GET'
+    })
+    .then(res => res.json()))
+    .map(el => new PrivateUser(...el))
+    .sort((a, b) => b.sumTime - a.sumTime)
+  },
+  mounted(){
+
   }
 }
 </script>
