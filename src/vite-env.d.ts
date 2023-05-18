@@ -6,3 +6,18 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>
   export default component
 }
+
+declare module 'lcd' {
+  export default class Lcd {
+    constructor(options: {
+      rs: number,
+      e: number,
+      data: number[],
+      cols: number,
+      rows: number,
+    })
+    writeToLcd(col: number, row: number, data: string): void;
+    setCursor(col: number, row: number): void;
+    print(data: string, callback: (err: Error) => void): void;
+  }
+}
