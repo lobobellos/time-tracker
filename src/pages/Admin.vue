@@ -11,70 +11,62 @@
 
 
 <script lang="ts">
-import { exampleData } from '../dataManager.js';
 import beautify from 'json-beautify';
 
-const day = 24* 60 *60 * 1000
-
-const data = exampleData;
-
 export default {
-  data(){
+  data() {
     return {
-      adminPass : "",
-      correctPass : false,
-      textArea : "",
+      adminPass: "",
+      correctPass: false,
+      textArea: "",
     }
   },
   computed: {
     prettyJson() {
-      return beautify(this.data, null, 2,1e2);
+      return beautify(this.data, null, 2, 1e2);
     },
   },
-  mounted(){
-    
-  },
-  methods:{
-    async checkPass(){
+  methods: {
+    async checkPass() {
       this.correctPass = this.correctPass ? true :
-      await fetch('/isAdminPassword', {
-        method: 'POST',
-        headers: [
-          ['Content-Type', 'application/json'],
-        ],
-        body: JSON.stringify({
-          password: this.adminPass,
+        await fetch('/isAdminPassword', {
+          method: 'POST',
+          headers: [
+            ['Content-Type', 'application/json'],
+          ],
+          body: JSON.stringify({
+            password: this.adminPass,
+          })
         })
-      })
-      .then(res=>res.json())
-      if(this.correctPass){
+          .then(res => res.json())
+      if (this.correctPass) {
         this.getAllData()
       }
     },
-    async getAllData(){
+    async getAllData() {
       await fetch('/fullData', {
         method: 'GET',
         headers: [
           ['admin-password', this.adminPass],
         ],
       })
-      .then(async res=>{
-        if(res.ok){
-          this.data =await res.json()
-          this.textArea = beautify(this.data, null, 2,1e2)
-        }else{
-          alert(await res.text())
-        }
-      })
+        .then(async res => {
+          if (res.ok) {
+            this.data = await res.json()
+            this.textArea = beautify(this.data, null, 2, 1e2)
+          } else {
+            alert(await res.text())
+          }
+        })
     },
-    async publishData(){
-      try{
+    async publishData() {
+      try {
         JSON.parse(this.textArea)
-      }catch(err){
+      } catch (err) {
         alert("invalid json")
         return
       }
-      if(prompt("are you sure? type 'yes' to confirm").toLowerCase() == "yes"){
+      if (prompt("are you sure? type 'yes' to confirm").toLowerCase() == "yes") {
         await fetch('/publishData', {
           method: 'POST',
           headers: [
@@ -82,28 +74,27 @@ export default {
             ['admin-password', this.adminPass],
           ],
           body: JSON.stringify({
-            data: JSON.parse( this.textArea)
+            data: JSON.parse(this.textArea)
           })
         })
-        .then(async res=>{
-          if(res.ok){
-            alert("data published")
-          }else{
-            alert('Error'+await res.text())
-          }
-        })
+          .then(async res => {
+            if (res.ok) {
+              alert("data published")
+            } else {
+              alert('Error' + await res.text())
+            }
+          })
       }
     }
   }
 }
 </script>
 
-
 <style scoped>
-textarea{
-  width:calc(100% - 4rem);
+textarea {
+  width: calc(100% - 4rem);
   height: 500px;
-  margin-top:1rem;
+  margin-top: 1rem;
   margin-left: 2rem;
   margin-right: 2rem;
 }
