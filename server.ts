@@ -149,7 +149,7 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, async () => {
   console.log(chalk.greenBright(`Server is running on port ${PORT}.`));
   //@ts-ignore
- console.log(os.networkInterfaces()['Wi-Fi'].filter(el=>el.family==='IPv4' && el.internal===false)[0])
+ console.log(os.networkInterfaces());
 });
 
 
