@@ -21,9 +21,9 @@ let pressedRecently = false;
 console.log(chalk.blueBright("starting inputListener"))
 
 gpio.on('change', async rpipin => {
-  if(pressedRecently) return;
-  pressedRecently =true
-  setTimeout(()=>pressedRecently = false, 500)
+  if (pressedRecently) return;
+  pressedRecently = true
+  setTimeout(() => pressedRecently = false, 500)
   console.log(`pin ${rpipin} pressed`)
   if (lastPin == null) return
   if (rpipin == 7) {
@@ -53,13 +53,9 @@ gpio.on('change', async rpipin => {
 })
 
 function isvalid(t: time): boolean {
-  const day = 24 * 60 * 60 * 1000
   let [start, end] = t
-
-  start %= day
-  end %= day
-
-  return end > start &&
+  const day = 24 * 60 * 60 * 1000
+  return (new Date(start)).getDay() == (new Date(end)).getDay() &&
     end - start < day
 }
 
