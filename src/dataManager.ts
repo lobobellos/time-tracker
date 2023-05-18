@@ -110,13 +110,13 @@ export async function changeName(pin: number, newName: string) {
   if (data.find(el => el[1] == newName)) {
     throw `Name ${newName} already exists.`
   }
-  if(!data.find(el => el[0] == pin)) {
+  if (!data.find(el => el[0] == pin)) {
     throw `Name ${pin} does not exist`
   }
   console.log('writing new name')
   writeData(
-    data.map(el => el[0] == pin ? 
-      [el[0], newName, el[2], el[3] ]:
+    data.map(el => el[0] == pin ?
+      [el[0], newName, el[2], el[3]] :
       el
     )
   )
@@ -124,13 +124,13 @@ export async function changeName(pin: number, newName: string) {
 export async function changeTitle(pin: number, newTitle: string) {
   let data = await getRawData()
 
-  if(!data.find(el => el[0] == pin)) {
+  if (!data.find(el => el[0] == pin)) {
     throw `Name ${pin} does not exist`
   }
   console.log('writing new name')
   writeData(
-    data.map(el => el[0] == pin ? 
-      [el[0], el[1], newTitle, el[3] ]:
+    data.map(el => el[0] == pin ?
+      [el[0], el[1], newTitle, el[3]] :
       el
     )
   )
@@ -173,4 +173,3 @@ export const exampleData: privateUserData[] = [
   ["Michael", "Drive Team Captain", [[0, 6000000]]],
   ["Rebecca", "Team Captain", [[1683496997868, 1683497997868]]],
 ]
-

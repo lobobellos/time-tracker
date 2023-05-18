@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 dotenv.config()
-if(process.env.ADMIN_PASSWORD == undefined) throw new Error('ADMIN_PASSWORD is not defined')
+if (process.env.ADMIN_PASSWORD == undefined) throw new Error('ADMIN_PASSWORD is not defined')
 
 import express from 'express';
 import * as url from 'url';
@@ -22,11 +22,11 @@ app.use(express.json());
 
 app.get("/data", async (req, res) => {
   res.type("json");
-  res.send(<privateUserData[]>(await getRawData()).map(el=>el.splice(1)));
+  res.send(<privateUserData[]>(await getRawData()).map(el => el.splice(1)));
 });
 
 app.get("/fullData", async (req, res) => {
-  if(req.headers['admin-password'] == process.env.ADMIN_PASSWORD) {
+  if (req.headers['admin-password'] == process.env.ADMIN_PASSWORD) {
     res.send(await getRawData());
   } else {
     res.sendStatus(401);
@@ -34,15 +34,15 @@ app.get("/fullData", async (req, res) => {
 });
 
 app.post("/publishData", async (req, res) => {
-  if(req.headers['admin-password'] == process.env.ADMIN_PASSWORD) {
-    try{
+  if (req.headers['admin-password'] == process.env.ADMIN_PASSWORD) {
+    try {
       await writeData(req.body.data);
       res.sendStatus(202);
-    }catch(err){
+    } catch (err) {
       console.log(err);
       res.sendStatus(400);
     }
-  }else{
+  } else {
     res.sendStatus(401);
   }
 })
@@ -135,7 +135,7 @@ app.post("/changeTitle", async (req: { body: changeTitleInfo }, res) => {
   }
 })
 
-app.post('/isAdminPassword',async (req, res) => {
+app.post('/isAdminPassword', async (req, res) => {
   res.send(req.body.password == process.env.ADMIN_PASSWORD)
 })
 
