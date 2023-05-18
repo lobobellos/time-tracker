@@ -16,6 +16,7 @@ declare module 'lcd' {
       cols: number,
       rows: number,
     })
+    on(event: string, callback: () => void): void
     async clear(): Promise<void>;
     writeToLcd(col: number, row: number, data: string): void;
     setCursor(col: number, row: number): void;
