@@ -25,9 +25,9 @@ lcd.on('ready', async() => {
     await lcd.clear();
 
     lcd.setCursor(0, 0);
-    lcd.print( ip,()=>{});
+    lcd.print( getParsedString(),()=>{});
 
-    cur = (cur + 1) % getFullString().length
+    cur = (cur + 1) % getFullString().length - 16
   },1000)
 })
 
