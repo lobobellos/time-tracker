@@ -4,10 +4,10 @@
   "singleQuote": true,
   "semi": false,
   "trailingComma": "all",
-  "bracketSpacing": false,
+  "bracketSpacing": true,
   "printWidth": 60,
   "arrowParens": "avoid",
   "vueIndentScriptAndStyle": false,
   "endOfLine": "auto",
-  "htmlWhitespaceSensitivity": "css"
+  "htmlWhitespaceSensitivity": "ignore"
 }
