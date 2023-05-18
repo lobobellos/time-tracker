@@ -6,13 +6,15 @@ export async function clearLCD() {
   await lcd.clear();
 }
 
-export async function writeToLcd(col:number, row:number, data:string) {
-  console.log("LCD written "+data)
-  lcd.setCursor(col, row);
-  lcd.print(data, (err) => {
-    if (err) {
-      throw err;
-    }
+export async function writeToLcd(col:number, row:number, data:string) : Promise<void> {
+  return new Promise((resolve, reject) => {
+    console.log("LCD written "+data)
+    lcd.setCursor(col, row);
+    lcd.print(data, (err) => {
+      if (err) {
+        reject(err);
+      }
+    })
+    resolve();
   })
-  return
 }
