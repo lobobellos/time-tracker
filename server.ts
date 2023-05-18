@@ -7,7 +7,7 @@ import express from 'express';
 import * as url from 'url';
 import path from 'node:path';
 import chalk from 'chalk';
-import { clearLCD, writeToLcd } from './lcd.js';
+import {  setIP, writeToLcd } from './lcd.js';
 import { addUser, changeName, changeTitle, changeUserPin, getRawData, getUser, privateUserData, writeData } from './src/dataManager.js';
 import { createServer as createViteServer } from 'vite'
 
@@ -152,15 +152,8 @@ app.listen(PORT, async () => {
   let interfaces = os.networkInterfaces();
   let ip = interfaces.wlan0.find(el => el.family === 'IPv4').address;
   console.log(ip);
-  let currentCol = 0;
   let url = ip+":" + PORT
-  let len= url.length
-  setTimeout(async() => {
-    await clearLCD();
-    await writeToLcd(0,0,"view data at");
-    await writeToLcd(0, 1, url);
-    //currentCol = (currentCol + 1) % (len - 16)
-  },1000)
+  setIP(url)  
 });
 
 
