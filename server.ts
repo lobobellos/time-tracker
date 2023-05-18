@@ -7,7 +7,7 @@ import express from 'express';
 import * as url from 'url';
 import path from 'node:path';
 import chalk from 'chalk';
-import {  setIP, writeToLcd } from './lcd.js';
+import {  setIP, } from './lcd.js';
 import { addUser, changeName, changeTitle, changeUserPin, getRawData, getUser, privateUserData, writeData } from './src/dataManager.js';
 import { createServer as createViteServer } from 'vite'
 
