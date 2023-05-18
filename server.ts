@@ -155,12 +155,12 @@ app.listen(PORT, async () => {
   let currentCol = 0;
   let url = ip+":" + PORT
   let len= url.length
-  //setInterval(async() => {
+  setTimeout(async() => {
     await clearLCD();
     await writeToLcd(0,0,"view data at");
     await writeToLcd(0, 1, url);
     //currentCol = (currentCol + 1) % (len - 16)
-  //},1000)
+  },1000)
 });
 
 
