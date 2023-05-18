@@ -4,8 +4,8 @@
   <input name="adminPass" type="password" v-model="adminPass" @input="checkPass">
 
   <div v-if="correctPass">
-    <textarea name="" id="" >{{ prettyJson }}</textarea>
-    <button>sumbit new data</button>
+    <textarea name="" id="" v-model="textArea"></textarea>
+    <button @click="publishData">submit new data</button>
   </div>
 </template>
 
@@ -23,12 +23,12 @@ export default {
     return {
       adminPass : "",
       correctPass : false,
-      data: [],
+      textArea : "",
     }
   },
   computed: {
     prettyJson() {
-      return beautify(this.data, null, 1000);
+      return beautify(this.data, null, 2,1e2);
     },
   },
   mounted(){
@@ -47,16 +47,52 @@ export default {
         })
       })
       .then(res=>res.json())
+      if(this.correctPass){
+        this.getAllData()
+      }
     },
     async getAllData(){
-      await fetch('/getAllData', {
+      await fetch('/fullData', {
         method: 'GET',
         headers: [
-          ['Content-Type', 'application/json'],
-          ['Accept', 'application/json'],
-          ['adminPassword', this.adminPass],
+          ['admin-password', this.adminPass],
         ],
       })
+      .then(async res=>{
+        if(res.ok){
+          this.data =await res.json()
+          this.textArea = beautify(this.data, null, 2,1e2)
+        }else{
+          alert(await res.text())
+        }
+      })
+    },
+    async publishData(){
+      try{
+        JSON.parse(this.textArea)
+      }catch(err){
+        alert("invalid json")
+        return
+      }
+      if(prompt("are you sure? type 'yes' to confirm").toLowerCase() == "yes"){
+        await fetch('/publishData', {
+          method: 'POST',
+          headers: [
+            ['Content-Type', 'application/json'],
+            ['admin-password', this.adminPass],
+          ],
+          body: JSON.stringify({
+            data: JSON.parse( this.textArea)
+          })
+        })
+        .then(async res=>{
+          if(res.ok){
+            alert("data published")
+          }else{
+            alert('Error'+await res.text())
+          }
+        })
+      }
     }
   }
 }
@@ -66,7 +102,7 @@ export default {
 <style scoped>
 textarea{
   width:calc(100% - 4rem);
-  height: fit-content;
+  height: 500px;
   margin-top:1rem;
   margin-left: 2rem;
   margin-right: 2rem;

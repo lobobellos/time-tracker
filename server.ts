@@ -6,7 +6,7 @@ import express from 'express';
 import * as url from 'url';
 import path from 'node:path';
 import chalk from 'chalk';
-import { addUser, changeName, changeTitle, changeUserPin, getRawData, getUser, privateUserData } from './src/dataManager.js';
+import { addUser, changeName, changeTitle, changeUserPin, getRawData, getUser, privateUserData, writeData } from './src/dataManager.js';
 import { createServer as createViteServer } from 'vite'
 
 let app = express();
@@ -24,6 +24,28 @@ app.get("/data", async (req, res) => {
   res.type("json");
   res.send(<privateUserData[]>(await getRawData()).map(el=>el.splice(1)));
 });
+
+app.get("/fullData", async (req, res) => {
+  if(req.headers['admin-password'] == process.env.ADMIN_PASSWORD) {
+    res.send(await getRawData());
+  } else {
+    res.sendStatus(401);
+  }
+});
+
+app.post("/publishData", async (req, res) => {
+  if(req.headers['admin-password'] == process.env.ADMIN_PASSWORD) {
+    try{
+      await writeData(req.body.data);
+      res.sendStatus(202);
+    }catch(err){
+      console.log(err);
+      res.sendStatus(400);
+    }
+  }else{
+    res.sendStatus(401);
+  }
+})
 
 app.post("/login", async (req, res) => {
   console.log(req.body);
