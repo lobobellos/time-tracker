@@ -13,22 +13,10 @@ lcd.on('ready', async() => {
   
   setInterval(async () => {
     await lcd.clear();
-    await writeToLcd(0,0,"view data at");
-    await writeToLcd(1,0,ip);
+
+    lcd.setCursor(0, 0);
+    lcd.print( ip,()=>{});
   })
 })
 
 
-
-export async function writeToLcd(col:number, row:number, data:string) : Promise<void> {
-  return new Promise((resolve, reject) => {
-    console.log("LCD written "+data)
-    lcd.setCursor(col, row);
-    lcd.print(data, (err) => {
-      if (err) {
-        reject(err);
-      }
-    })
-    resolve();
-  })
-}
