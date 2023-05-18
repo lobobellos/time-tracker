@@ -16,7 +16,7 @@ lcd.on('ready', async() => {
 
     lcd.setCursor(0, 0);
     lcd.print( ip,()=>{});
-  })
+  },1000)
 })
 
 
