@@ -7,6 +7,7 @@ import express from 'express';
 import * as url from 'url';
 import path from 'node:path';
 import chalk from 'chalk';
+import {writeToLcd } from './lcd.js';
 import { addUser, changeName, changeTitle, changeUserPin, getRawData, getUser, privateUserData, writeData } from './src/dataManager.js';
 import { createServer as createViteServer } from 'vite'
 
@@ -148,8 +149,8 @@ app.get("*", (req, res) => {
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, async () => {
   console.log(chalk.greenBright(`Server is running on port ${PORT}.`));
-  //@ts-ignore
  console.log(os.networkInterfaces());
+ writeToLcd(0, 0, "running on port " + PORT);
 });
 
 
