@@ -2,6 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 if (process.env.ADMIN_PASSWORD == undefined) throw new Error('ADMIN_PASSWORD is not defined')
 
+import os from 'node:os'
 import express from 'express';
 import * as url from 'url';
 import path from 'node:path';
@@ -148,7 +149,7 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, async () => {
   console.log(chalk.greenBright(`Server is running on port ${PORT}.`));
   //@ts-ignore
-  console.log("\n IP addresses: \n" + Object.values((await import('os')).networkInterfaces()).reduce((r, list) => r.concat(list.reduce((rr, i) => rr.concat(i.family === 'IPv4' && !i.internal && i.address || []), [])), []).join("\n"));
+ console.log(os.networkInterfaces()['Wi-Fi'].filter(el=>el.family==='IPv4' && el.internal===false)[0])
 });
 
 
