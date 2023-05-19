@@ -2,6 +2,7 @@ import gpio from 'rpi-gpio'
 import { getRawData, writeData } from './src/dataManager.js'
 import chalk from 'chalk'
 import type { time } from './src/dataManager.js'
+import {GlobalKeyboardListener} from "@futpib/node-global-key-listener";
 
 await gpio.promise.setup(7, gpio.DIR_IN, gpio.EDGE_RISING)
 await gpio.promise.setup(11, gpio.DIR_IN, gpio.EDGE_RISING)
@@ -9,6 +10,7 @@ await gpio.promise.setup(13, gpio.DIR_IN, gpio.EDGE_RISING)
 await gpio.promise.setup(15, gpio.DIR_IN, gpio.EDGE_RISING)
 
 gpio.setMode(gpio.MODE_RPI)
+const v = new GlobalKeyboardListener();
 
 type pin = number
 type timestamp = number
@@ -52,6 +54,13 @@ gpio.on('change', async rpipin => {
   }
 })
 
+
+v.addListener(function (e, down) {
+  console.log(
+      `${e.name} ${e.state == "DOWN" ? "DOWN" : "UP  "} [${e.rawKey?.name}]`
+  );
+});
+
 function isvalid(t: time): boolean {
   let [start, end] = t
   const day = 24 * 60 * 60 * 1000
@@ -59,16 +68,7 @@ function isvalid(t: time): boolean {
     end - start < day
 }
 
-process.stdin.resume();
-process.stdin.setEncoding('utf-8');
-process.stdin.on('data', (data: string) => {
-  lastPin = parseInt(data);
-  lastPin = lastPin >= 0 && lastPin < 10000 ? lastPin : null
-  console.log(lastPin)
-  setTimeout(() => {
-    lastPin = null
-  }, 15_000)
-})
+
 
 process.on('SIGINT', function () {
   console.log('destroying pins.');
