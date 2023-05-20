@@ -4,7 +4,6 @@ if (process.env.ADMIN_PASSWORD == undefined) throw new Error('ADMIN_PASSWORD is 
 
 import os from 'node:os'
 import express from 'express';
-import * as url from 'url';
 import path from 'node:path';
 import chalk from 'chalk';
 import {  setIP, } from './lcd.js';
@@ -12,7 +11,6 @@ import { addUser, changeName, changeTitle, changeUserPin, getRawData, getUser, p
 import { createServer as createViteServer } from 'vite'
 
 let app = express();
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const vite = await createViteServer({
   server: { middlewareMode: true },
