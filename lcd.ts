@@ -1,5 +1,8 @@
+import dotenv from 'dotenv'
+dotenv.config()
 
 if(process.env.IS_PROD == 'true'){
+  //@ts-ignore
   const Lcd =await import('lcd')
   //@ts-ignore
   const lcd = new Lcd({ rs: 26, e: 19, data: [13, 6, 5, 11], cols: 16, rows: 2 });
