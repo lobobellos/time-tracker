@@ -3,7 +3,7 @@ dotenv.config()
 import { getRawData, writeData } from './src/dataManager.js'
 import chalk from 'chalk'
 import type { time } from './src/dataManager.js'
-import {GlobalKeyboardListener} from "@futpib/node-global-key-listener";
+
 
 if(process.env.IS_PROD == 'true'){
   const gpio =(await import('rpi-gpio')).default
@@ -42,9 +42,29 @@ if(process.env.IS_PROD == 'true'){
       }
     }
   })
+  //@ts-ignore
+  const GK = (await import("global-keypress")).default
+
+  const gk = new GK();
+ 
+  // launch keypress daemon process
+  gk.start();
+
+  gk.on('press', (data:any) => {
+    console.log(data.data)
+    
+    if(data.data == "RETURN" && tempPin !=''){
+      lastPin = parseInt(tempPin)
+      tempPin = ""
+      setTimeout(()=>lastPin=null,10_000)
+    }else{
+      tempPin +=  (parseInt(data.data ?? "") || "").toString()
+    }
+    console.log(tempPin)
+    console.log(lastPin)
+  })
 }
 
-const v = new GlobalKeyboardListener();
 
 type pin = number
 type timestamp = number
@@ -56,22 +76,6 @@ let clockedIn = new Map<pin, timestamp>()
 let pressedRecently = false;
 
 console.log(chalk.blueBright("starting inputListener"))
-
-
-v.addListener(function (e) {
-  if(e.state == 'UP'){
-    
-    if(e.name == "RETURN" && tempPin !=''){
-      lastPin = parseInt(tempPin)
-      tempPin = ""
-      setTimeout(()=>lastPin=null,10_000)
-    }else{
-      tempPin +=  (parseInt(e.name ?? "") || "").toString()
-    }
-  }
-  console.log(tempPin)
-  console.log(lastPin)
-});
 
 function isvalid(t: time): boolean {
   let [start, end] = t
