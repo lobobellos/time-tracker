@@ -63,6 +63,17 @@ if(process.env.IS_PROD == 'true'){
     console.log(tempPin)
     console.log(lastPin)
   })
+
+
+    // process error
+  gk.on('error', error => {
+    console.error(error);
+  });
+  
+  // process closed
+  gk.on('close', () => {
+    console.log('closed');
+  });
 }
 
 
