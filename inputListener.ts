@@ -6,7 +6,7 @@ import type { time } from './src/dataManager.js'
 import {GlobalKeyboardListener} from "@futpib/node-global-key-listener";
 
 if(process.env.IS_PROD == 'true'){
-  const gpio =await import('rpi-gpio')
+  const gpio =(await import('rpi-gpio')).default
 
   await gpio.promise.setup(7, gpio.DIR_IN, gpio.EDGE_RISING)
   await gpio.promise.setup(11, gpio.DIR_IN, gpio.EDGE_RISING)
