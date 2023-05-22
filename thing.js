@@ -1,4 +1,4 @@
-const GK = require('global-keypress');
+import GK from'global-keypress'
  
 // instantiate
 const gk = new GK();
