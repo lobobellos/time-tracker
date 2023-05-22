@@ -6,9 +6,11 @@ import os from 'node:os'
 import express from 'express';
 import path from 'node:path';
 import chalk from 'chalk';
-import {  setIP, } from './lcd.js';
+import { setIP } from './lcd.js';
 import { addUser, changeName, changeTitle, changeUserPin, getRawData, getUser, privateUserData, writeData } from './src/dataManager.js';
 import { createServer as createViteServer } from 'vite'
+import { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 let app = express();
 
@@ -16,6 +18,8 @@ const vite = await createViteServer({
   server: { middlewareMode: true },
   appType: 'custom', // don't include Vite's default HTML handling middlewares
 })
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 app.use(vite.middlewares)
 app.use(express.json());
@@ -140,6 +144,7 @@ app.post('/isAdminPassword', async (req, res) => {
 })
 
 app.get("*", (req, res) => {
+  console.log(path.join(__dirname, "index.html"))
   res.sendFile(path.join(__dirname, "index.html"));
 })
 
