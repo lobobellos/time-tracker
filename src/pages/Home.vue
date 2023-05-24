@@ -2,7 +2,7 @@
 	<div class="container">
 		<h1>Rankings:</h1>
 
-		<div class="user" v-for="[i, v] in data.entries()">
+		<div class="user" v-for="[i, v] in data.entries()" v-if="data.length">
 			<div class="rank">
 				{{ i + 1 }}
 			</div>
@@ -12,6 +12,9 @@
 				<p>total time: {{ v.sumTimeString }}</p>
 				<p>total time ms: {{ v.sumTime }}</p>
 			</div>
+		</div>
+		<div v-else>
+			<p>no data rn</p>
 		</div>
 	</div>
 </template>
