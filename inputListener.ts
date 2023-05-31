@@ -3,7 +3,7 @@ dotenv.config()
 import { getRawData, writeData } from './src/dataManager.js'
 import chalk from 'chalk'
 import type { time } from './src/dataManager.js'
-
+import { setLine2 } from './lcd.js'
 
 if(process.env.IS_PROD == 'true'){
   const gpio =(await import('rpi-gpio')).default
@@ -21,6 +21,8 @@ if(process.env.IS_PROD == 'true'){
       //clock in
       if (!clockedIn.has(lastPin)) {
         console.log('you are clocked in')
+        setLine2("clocked in!")
+        setTimeout(() => setLine2(""), 3000)
         clockedIn.set(lastPin, Date.now())
       }
     } else if (rpipin == 11) {
@@ -37,7 +39,8 @@ if(process.env.IS_PROD == 'true'){
         }
         await writeData(data)
         clockedIn.delete(lastPin)
-        console.log('you are clocked out')
+        setLine2("clocked out!")
+        setTimeout(() => setLine2(""), 3000)
         console.log(data[3])
       }
     }
@@ -70,6 +73,8 @@ if(process.env.IS_PROD == 'true'){
     if(data.data == "<KPEnter>" && tempPin !=''){
       lastPin = parseInt(tempPin)
       tempPin = ""
+      setLine2("pin recieved!")
+      setTimeout(() => setLine2(""), 1000)
       setTimeout(()=>lastPin=null,10_000)
     }else{
       tempPin +=  (parseInt(KEYSTATETABLE[data.data] ?? "") || "").toString()

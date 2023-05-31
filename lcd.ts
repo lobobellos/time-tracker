@@ -18,7 +18,7 @@ if (process.env.IS_PROD == 'true') {
         lcd.print(line2, () => {})
        });
       cur = (cur + 1) % (getFullString().length - 16)
-    }, 1000)
+    }, 600)
   })
 }
 
