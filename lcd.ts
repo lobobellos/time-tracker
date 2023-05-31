@@ -15,10 +15,10 @@ if (process.env.IS_PROD == 'true') {
       lcd.setCursor(0, 0);
       lcd.print(getParsedString(), () => {
         lcd.setCursor(0, 1);
-        lcd.print(line2, () => {})
+        lcd.print(line2 ?? "", () => {})
        });
       cur = (cur + 1) % (getFullString().length - 16)
-    }, 600)
+    }, 1000)
   })
 }
 
