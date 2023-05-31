@@ -15,7 +15,7 @@ if (process.env.IS_PROD == 'true') {
       lcd.setCursor(0, 0);
       lcd.print(getParsedString(), () => {
         lcd.setCursor(0, 1);
-        lcd.print("potato", () => {})
+        lcd.print(line2, () => {})
        });
       cur = (cur + 1) % (getFullString().length - 16)
     }, 1000)
@@ -24,6 +24,7 @@ if (process.env.IS_PROD == 'true') {
 
 let ip = 'undefined'
 let cur = 0
+let line2= ""
 
 function getFullString() {
   return `go to ${ip}`
@@ -35,6 +36,10 @@ function getParsedString() {
 
 export function setIP(ipString: string) {
   ip = ipString
+}
+
+export function setLine2(line2String: string) {
+  line2 = line2String
 }
 
 
