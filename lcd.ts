@@ -13,7 +13,10 @@ if (process.env.IS_PROD == 'true') {
     setInterval(async () => {
       await lcd.clear();
       lcd.setCursor(0, 0);
-      lcd.print(getParsedString(), () => { });
+      lcd.print(getParsedString(), () => {
+        lcd.setCursor(0, 1);
+        lcd.print("potato", () => {})
+       });
       cur = (cur + 1) % (getFullString().length - 16)
     }, 1000)
   })
