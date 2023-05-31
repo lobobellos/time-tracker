@@ -2,4 +2,6 @@
 
 echo "time-tracker: ## Starting ##" | systemd-cat -p info
 
-npm run server & npm run inputListen
+npm run server & npm run inputListen &&
+
+exit 0
