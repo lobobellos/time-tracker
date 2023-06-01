@@ -1,16 +1,16 @@
 import dotenv from 'dotenv'
-dotenv.config() 
+dotenv.config()
 import { getRawData, writeData } from './src/dataManager.js'
 import chalk from 'chalk'
 import type { time } from './src/dataManager.js'
 import { setLine2 } from './lcd.js'
 
-if(process.env.IS_PROD == 'true'){
-  const gpio =(await import('rpi-gpio')).default
+if (process.env.IS_PROD == 'true') {
+  const gpio = (await import('rpi-gpio')).default
 
   await gpio.promise.setup(7, gpio.DIR_IN, gpio.EDGE_RISING)
   await gpio.promise.setup(11, gpio.DIR_IN, gpio.EDGE_RISING)
-  
+
   gpio.on('change', async rpipin => {
     if (pressedRecently) return;
     pressedRecently = true
@@ -63,32 +63,32 @@ if(process.env.IS_PROD == 'true'){
   const GK = (await import("global-keypress")).default
 
   const gk = new GK();
- 
+
   // launch keypress daemon process
   gk.start();
 
-  gk.on('press', (data:any) => {
+  gk.on('press', (data: any) => {
     console.log(data.data)
-    
-    if(data.data == "<KPEnter>" && tempPin !=''){
+
+    if (data.data == "<KPEnter>" && tempPin != '') {
       lastPin = parseInt(tempPin)
       tempPin = ""
       setLine2("pin recieved!")
       setTimeout(() => setLine2(""), 1000)
-      setTimeout(()=>lastPin=null,10_000)
-    }else{
-      tempPin +=  (parseInt(KEYSTATETABLE[data.data] ?? "") || "").toString()
+      setTimeout(() => lastPin = null, 10_000)
+    } else {
+      tempPin += (parseInt(KEYSTATETABLE[data.data] ?? "") || "").toString()
     }
     console.log(tempPin)
     console.log(lastPin)
   })
 
 
-    // process error
+  // process error
   gk.on('error', error => {
     console.error(error);
   });
-  
+
   // process closed
   gk.on('close', () => {
     console.log('closed');
