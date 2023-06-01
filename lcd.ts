@@ -3,6 +3,7 @@ dotenv.config()
 
 export async function startLCD() {
   if (process.env.IS_PROD == 'true') {
+    //@ts-ignore
     const Lcd = (await import('lcd')).default
     const lcd = new Lcd({ rs: 26, e: 19, data: [13, 6, 5, 11], cols: 16, rows: 2 });
     lcd.on('ready', async () => {
