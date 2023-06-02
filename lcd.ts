@@ -9,9 +9,12 @@ export default class Lcd {
   constructor() {
     if (!Lcd.initilized) {
       Lcd.initilized = true
+      this.init()
     } else {
       throw new Error('Lcd already initialized')
     }
+  }
+  async init() {
     if (process.env.IS_PROD == 'true') {
       //@ts-ignore
       const Lcd = (await import('lcd')).default
@@ -28,6 +31,7 @@ export default class Lcd {
         }, 1000)
       })
     }
+    
   }
   getFullString() {
     return `go to ${this.ip}`
