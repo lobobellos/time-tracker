@@ -1,41 +1,47 @@
 import dotenv from 'dotenv'
 dotenv.config()
 
-export async function startLCD() {
-  if (process.env.IS_PROD == 'true') {
-    //@ts-ignore
-    const Lcd = (await import('lcd')).default
-    const lcd = new Lcd({ rs: 26, e: 19, data: [13, 6, 5, 11], cols: 16, rows: 2 });
-    lcd.on('ready', async () => {
-      setInterval(async () => {
-        await lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print(getParsedString(), () => {
-          lcd.setCursor(0, 1);
-          lcd.print(line2 ?? "", () => { })
-        });
-        cur = (cur + 1) % (getFullString().length - 16)
-      }, 1000)
-    })
+export default class Lcd {
+  static initilized = false
+  private ip = 'undefined'
+  private cur = 0
+  private line2 = ""
+  constructor() {
+    if (!Lcd.initilized) {
+      Lcd.initilized = true
+    } else {
+      throw new Error('Lcd already initialized')
+    }
+    if (process.env.IS_PROD == 'true') {
+      //@ts-ignore
+      const Lcd = (await import('lcd')).default
+      const lcd = new Lcd({ rs: 26, e: 19, data: [13, 6, 5, 11], cols: 16, rows: 2 });
+      lcd.on('ready', async () => {
+        setInterval(async () => {
+          await lcd.clear();
+          lcd.setCursor(0, 0);
+          lcd.print(this.getParsedString(), () => {
+            lcd.setCursor(0, 1);
+            lcd.print(this.line2 ?? "", () => { })
+          });
+          this.cur = (this.cur + 1) % (this.getFullString().length - 16)
+        }, 1000)
+      })
+    }
   }
-}
+  getFullString() {
+    return `go to ${this.ip}`
+  }
 
-let ip = 'undefined'
-let cur = 0
-let line2 = ""
+  getParsedString() {
+    return this.getFullString().substring(this.cur, this.cur + 16)
+  }
 
-function getFullString() {
-  return `go to ${ip}`
-}
+  setIP(ip: string) {
+    this.ip = ip
+  }
 
-function getParsedString() {
-  return getFullString().substring(cur, cur + 16)
-}
-
-export function setIP(ipString: string) {
-  ip = ipString
-}
-
-export function setLine2(line2String: string) {
-  line2 = line2String
+  setLine2(line2: string) {
+    this.line2 = line2
+  }
 }

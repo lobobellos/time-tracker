@@ -6,7 +6,7 @@ import os from 'node:os'
 import express from 'express';
 import path from 'node:path';
 import chalk from 'chalk';
-import { setIP, startLCD} from './lcd.js';
+import Lcd from './lcd.js';
 import { addUser, changeName, changeTitle, changeUserPin, getRawData, getUser, privateUserData, writeData } from './src/dataManager.js';
 import { createServer as createViteServer } from 'vite'
 import { dirname } from 'node:path'
@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url'
 
 let app = express();
 
-await startLCD()
+const lcd = new Lcd();
 
 const vite = await createViteServer({
   server: { middlewareMode: true },
@@ -158,7 +158,7 @@ app.listen(PORT, async () => {
   let ip = interfaces?.wlan0?.find(el => el.family === 'IPv4')?.address;
   console.log(ip);
   let url = ip+":" + PORT
-  setIP(url)  
+  lcd.setIP(url)  
 });
 
 
