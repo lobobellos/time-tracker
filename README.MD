@@ -8,10 +8,16 @@ A little device to clock people in and out of the robotics lab
 
 [//]: # (TODO: finish this)
 ## The Why
-so in the 2022 season, we used a google form,to track who spent the most time in the robotics room, wiht the end goal being to quantitatively decide who the most dedicated people on the team were. this system worked, but it was tedious, and a pain to do. regardless, in the 2023 season, our team captain of 3 years left, and we had to scramble a little bit.
-
+so in the 2022 season, we used a google form,to track who spent the most time in the robotics room, wiht the end goal being to quantitatively decide who the most dedicated people on the team were. this system worked, but it was tedious, and a pain to do. regardless, in the 2023 season, our team captain of 3 years left, and things got a little bit crazy. 
 
 ## Production Setup
+
+### supported Hardware
+
+|device| tested? |
+|----|-------|
+| raspberry pi 4 | yes |
+| raspberry pi 3 | hypothetically should work |
 
 ### Dependencies
 - npm and node v18+
@@ -42,7 +48,10 @@ so in the 2022 season, we used a google form,to track who spent the most time in
   sudo /absolute/path/to/scripts/startTmux.sh &&
   exit 0
   ```
-## Dev setup
+## Dev Setup
+
+### Supported Hardware
+- anything that can run nodejs
 
 ### Dependencies
 - npm and node v18+
