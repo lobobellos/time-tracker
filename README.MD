@@ -17,6 +17,19 @@ This includes:
 - The code (duh)
 - The wiring diagram (coming soon)
 
+## The How
+
+This project uses multiple technologies for the different parts of it. Here's a breakdown:
+
+- Frontend
+  - [VueJS](https://vuejs.org/)
+- Backend
+  - [ExpressJS](https://expressjs.com/)
+  - [ViteJS](https://vitejs.dev/)
+- Hardware
+  - [Rasberry Pi](https://www.raspberrypi.com/)
+  - [Sparkfun LCD](https://www.mouser.com/ProductDetail/SparkFun/LCD-00255?qs=WyAARYrbSnZUIzZ3sJcVBQ%3D%3D&mgh=1)
+
 ## Production Setup
 
 ### Supported Hardware
