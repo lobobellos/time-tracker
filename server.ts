@@ -23,8 +23,15 @@ const vite = await createViteServer({
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-app.use(vite.middlewares)
 app.use(express.json());
+if(process.env.BUILT === 'true') {
+  console.log("using prebuilt mode")
+  app.use(express.static(path.join(__dirname, 'dist')));
+}else{
+  console.log("using vite middleware mode")
+  app.use(vite.middlewares)
+}
+
 
 app.get("/data", async (req, res) => {
   res.type("json");
@@ -149,7 +156,6 @@ app.get("*", (req, res) => {
   console.log(path.join(__dirname, "index.html"))
   res.sendFile(path.join(__dirname, "index.html"));
 })
-
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, async () => {
