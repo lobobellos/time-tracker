@@ -4,7 +4,7 @@
 A little device to clock people in and out of the robotics lab
 
 [
-![cad img](https://github.com/lobobellos/time-tracker/assets/93680829/d31e5dc3-7da6-46a8-b3a1-72efaf76b850)
+![cad image](https://github.com/lobobellos/time-tracker/assets/93680829/fd916e13-eff8-4b7e-818e-c1f328ce2745)
 ](https://cad.onshape.com/documents/744ff102151cab140cc34028/w/d09d87bab049e0b5aa94faa4/e/a5d924fb01be7d6582799c44?renderMode=0&uiState=647a2cdb5326cc1f6f38e3dc)
 
 ## The Why
