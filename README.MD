@@ -49,10 +49,12 @@ This project uses multiple technologies for the different parts of it. Here's a 
 - Clone directory onto raspberry pi with `git clone https://github.com/lobobellos/time-tracker.git`
 - `npm i` to install deps
 - `npm run create-data` to create empty database
+- `npm run build` to compile and minify
 - Create .env
   - Set `ADMIN_PASSWORD`
   - Set `IS_PROD = "false"`
   - Set `PORT` Default is 8080
+  - Set `BUILT = "true"`
 - Give script execute perms with `chmod +x scripts/startTmux.sh`
 - Edit your `rc.local` file, to look like this, replacing `/absolute/path/` with your actual one, which will be something like `/home/pi/projects/time-tracker/` on a raspberrypi
 
@@ -82,6 +84,7 @@ This project uses multiple technologies for the different parts of it. Here's a 
   - Set `ADMIN_PASSWORD`
   - Set `IS_PROD = "false"`
   - Set `PORT` Default is 8080
+  - Set `BUILT = "false"` 
 
 ### Supported Hardware
 
