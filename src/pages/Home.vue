@@ -1,20 +1,21 @@
 <template>
 	<div class="container">
 		<h1>Rankings:</h1>
-
-		<div class="user" v-for="[i, v] in data.entries()" v-if="data.length">
-			<div class="rank">
-				{{ i + 1 }}
-			</div>
-			<div class="data">
-				<h3>{{ v.name }}</h3>
-				<p>{{ v.title }}</p>
-				<p>total time: {{ v.sumTimeString }}</p>
-				<p>total time ms: {{ v.sumTime }}</p>
+		<div v-if="data != null && data.length > 0">
+			<div class="user" v-for="[i, v] in data.entries()" >
+				<div class="rank">
+					{{ i + 1 }}
+				</div>
+				<div class="data">
+					<h3>{{ v.name }}</h3>
+					<p>{{ v.title }}</p>
+					<p>total time: {{ v.sumTimeString }}</p>
+					<p>total time ms: {{ v.sumTime }}</p>
+				</div>
 			</div>
 		</div>
 		<div v-else>
-			<p>no data rn</p>
+			<p>loading ...</p>
 		</div>
 	</div>
 </template>
