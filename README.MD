@@ -1,6 +1,8 @@
 # Time-Tracker
 
-![GitHub CI](https://github.com/lobobellos/time-tracker/actions/workflows/buildtest.yml/badge.svg)<br>
+![GitHub CI](https://github.com/lobobellos/time-tracker/actions/workflows/buildtest.yml/badge.svg) ![GitHub](https://img.shields.io/github/license/lobobellos/time-tracker)
+
+<br>
 A little device to clock people in and out of the robotics lab
 
 [
@@ -41,8 +43,8 @@ This project uses multiple technologies for the different parts of it. Here's a 
 
 ### Dependencies
 
-- npm and node v18+
-- tmux for raspberrypi
+- [npm](https://www.npmjs.com/) and [node](nodejs.org) v18+
+- [tmux](https://github.com/tmux/tmux/wiki) for raspberrypi
 
 ### Steps
 
