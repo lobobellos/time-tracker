@@ -58,7 +58,7 @@ This project uses multiple technologies for the different parts of it. Here's a 
   - Set `PORT` Default is 8080
   - Set `BUILT = "true"`
 - Give script execute perms with `chmod +x scripts/startTmux.sh`
-- Edit your `rc.local` file, to look like this, replacing `/absolute/path/` with your actual one, which will be something like `/home/pi/projects/time-tracker/` on a raspberrypi
+- Edit your `/etc/rc.local` file, to look like this, replacing `/absolute/path/` with your actual one, which will be something like `/home/pi/projects/time-tracker/` on a raspberrypi
 
   ```shell
   #!/bin/sh -e
