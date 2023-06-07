@@ -1,8 +1,6 @@
 # Time-Tracker
 
-![GitHub CI](https://github.com/lobobellos/time-tracker/actions/workflows/buildtest.yml/badge.svg) ![GitHub](https://img.shields.io/github/license/lobobellos/time-tracker)
-
-<br>
+![GitHub CI](https://github.com/lobobellos/time-tracker/actions/workflows/buildtest.yml/badge.svg) ![GitHub](https://img.shields.io/github/license/lobobellos/time-tracker)<br>
 A little device to clock people in and out of the robotics lab
 
 [
