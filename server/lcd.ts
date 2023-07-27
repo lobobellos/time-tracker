@@ -2,13 +2,13 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 export default class Lcd {
-  static initilized = false
+  static initialized = false
   private ip = 'undefined'
   private cur = 0
   private line2 = ""
   constructor() {
-    if (!Lcd.initilized) {
-      Lcd.initilized = true
+    if (!Lcd.initialized) {
+      Lcd.initialized = true
       this.init()
     } else {
       throw new Error('Lcd already initialized')
