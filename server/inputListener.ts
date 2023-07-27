@@ -1,8 +1,7 @@
 import dotenv from 'dotenv'
 dotenv.config()
-import { getRawData, writeData } from './src/dataManager.js'
+import { getRawData, writeData } from './dataManager.js'
 import chalk from 'chalk'
-import type { time } from './src/dataManager.js'
 
 if (process.env.IS_PROD == 'true') {
   const gpio = (await import('rpi-gpio')).default

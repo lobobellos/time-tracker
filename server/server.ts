@@ -7,31 +7,14 @@ import express from 'express';
 import path from 'node:path';
 import chalk from 'chalk';
 import Lcd from './lcd.js';
-import { addUser, changeName, changeTitle, changeUserPin, getRawData, getUser, privateUserData, writeData } from './src/dataManager.js';
-import { createServer as createViteServer } from 'vite'
+import { addUser, changeName, changeTitle, changeUserPin, getRawData, getUser,  writeData } from './dataManager.js';
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-let app = express();
-
+const app = express();
 const lcd = new Lcd();
-
-const vite = await createViteServer({
-  server: { middlewareMode: true },
-  appType: 'custom', // don't include Vite's default HTML handling middlewares
-})
-
 const __dirname = dirname(fileURLToPath(import.meta.url));
-
 app.use(express.json());
-if(process.env.BUILT === 'true') {
-  console.log("using prebuilt mode")
-  app.use(express.static(path.join(__dirname, 'dist')));
-}else{
-  console.log("using vite middleware mode")
-  app.use(vite.middlewares)
-}
-
 
 app.get("/data", async (req, res) => {
   res.type("json");

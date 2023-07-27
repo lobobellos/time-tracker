@@ -1,20 +1,4 @@
-import fs from 'fs/promises';
-
-export type time = [number, number];
-
-export type privateUserData = [
-  name: string,
-  title: string,
-  times: time[]
-]
-
-export type UserData = [
-  pin: number,
-  name: string,
-  title: string,
-  times: time[]
-]
-
+import fs from 'node:fs/promises';
 
 export class PrivateUser {
   name: string;
