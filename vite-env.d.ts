@@ -1,12 +1,3 @@
-/// <reference types="vite/client" />
-
-declare module '*.vue' {
-  import type { DefineComponent } from 'vue'
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
-  const component: DefineComponent<{}, {}, any>
-  export default component
-}
-
 declare module 'lcd' {
   export default class Lcd {
     constructor(options: {
@@ -17,7 +8,7 @@ declare module 'lcd' {
       rows: number,
     })
     on(event: string, callback: () => void): void
-    async clear(): Promise<void>;
+     clear(): Promise<void>;
     writeToLcd(col: number, row: number, data: string): void;
     setCursor(col: number, row: number): void;
     print(data: string, callback: (err: Error) => void): void;
