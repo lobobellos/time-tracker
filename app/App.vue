@@ -13,3 +13,5 @@
 	margin-right: 1rem;
 }
 </style>
+
+<style src="@/assets/css/style.css"></style>
