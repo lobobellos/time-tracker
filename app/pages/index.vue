@@ -20,31 +20,13 @@
 	</div>
 </template>
 
-<script lang="ts">
-import {
-	User,
-	UserData,
-	exampleData,
-	PrivateUser,
-	privateUserData,
-} from '../dataManager.js'
-export default {
-	name: 'Home',
-	data() {
-		return {
-			data: <PrivateUser[]>null,
-		}
-	},
-	async created() {
-		// watch the params of the route to fetch the data again
-		this.data = (<privateUserData[]>await fetch('/data', {
-			method: 'GET',
-		}).then(res => res.json()))
-			.map(el => new PrivateUser(...el))
-			.sort((a, b) => b.sumTime - a.sumTime)
-	},
-	mounted() {},
-}
+<script setup lang="ts">
+
+	const data = ref<any[]| null>(null)
+	onMounted(async () => {
+		data.value = (await $fetch<any[]>('/data'))
+	})
+	
 </script>
 
 <style scoped>
