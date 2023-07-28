@@ -13,6 +13,16 @@ declare type UserData = [
   times: time[]
 ]
 
+declare interface changeNameInfo {
+  pin: number
+  newName: string
+}
+
+declare interface changeTitleInfo {
+  pin: number;
+  newTitle: string;
+}
+
 declare module 'lcd' {
   export default class Lcd {
     constructor(options: {

@@ -14,3 +14,13 @@ declare type UserData = [
   title: string,
   times: time[]
 ]
+
+declare interface changeNameInfo {
+  pin: number
+  newName: string
+}
+
+declare interface changeTitleInfo {
+  pin: number;
+  newTitle: string;
+}
