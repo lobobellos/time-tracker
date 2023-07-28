@@ -43,25 +43,7 @@ app.post("/publishData", async (req, res) => {
   }
 })
 
-app.post("/login", async (req, res) => {
-  console.log(req.body);
-  console.log(req.body.pin);
-  res.type("json");
-  const data = (await getRawData())
-    .find(el => el[0] == req.body.pin)
 
-  if (!data) {
-    res.send(JSON.stringify({
-      found: false
-    }))
-  } else {
-    res.cookie("pin", req.body.pin);
-    res.send(JSON.stringify({
-      data,
-      found: true
-    }))
-  }
-});
 
 app.post('/create', async (req, res) => {
   try {
@@ -83,40 +65,8 @@ app.post("/getUser", async (req, res) => {
   })
 })
 
-export interface changeNameInfo {
-  pin: number
-  newName: string
-}
 
-export interface changeTitleInfo {
-  pin: number;
-  newTitle: string;
-}
 
-app.post("/changePin", async (req, res) => {
-  console.log(req.body);
-  try {
-    await changeUserPin(req.body.pin, req.body.newPin);
-    res.sendStatus(201);
-  } catch (err) {
-    console.log(err);
-    res.status(400)
-    res.send(err);
-  }
-})
-
-app.post("/changeName", async (req: { body: changeNameInfo }, res) => {
-  console.log(req.body);
-
-  try {
-    await changeName(req.body.pin, req.body.newName);
-    res.sendStatus(201);
-  } catch (err) {
-    console.log(err);
-    res.status(400)
-    res.send(err);
-  }
-})
 
 app.post("/changeTitle", async (req: { body: changeTitleInfo }, res) => {
   console.log(req.body);
@@ -135,10 +85,6 @@ app.post('/isAdminPassword', async (req, res) => {
   res.send(req.body.password == process.env.ADMIN_PASSWORD)
 })
 
-app.get("*", (req, res) => {
-  console.log(path.join(__dirname, "index.html"))
-  res.sendFile(path.join(__dirname, "index.html"));
-})
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, async () => {

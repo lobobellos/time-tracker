@@ -58,154 +58,134 @@
 	/>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import Cookies from 'js-cookie'
 import PinSelector from '../components/PinSelector.vue'
 import type { PinData } from '../components/PinSelector.vue.js'
-import { UserData } from '../dataManager.js'
-import type {
-	changeNameInfo,
-	changeTitleInfo,
-} from '../../server.js'
 
-export default {
-	name: 'my account',
-	components: {
-		PinSelector,
-	},
-	data() {
-		return {
-			newName: '',
-			newTitle: '',
-			isLoggedIn: false,
-			userInfo: <UserData>null,
-			showLightBox: false,
-			numTimesShown: 15,
-		}
-	},
-	computed: {
-		pin() {
-			return parseInt(Cookies.get('pin'))
-		},
-		topTimes() {
-			return !this.userInfo
-				? []
-				: (<UserData>this.userInfo)[3]
-						.map(time => [...time, time[1] - time[0]])
-						.sort((a, b) => b[2] - a[2])
-						.slice(0, this.numTimesShown)
-						.map(time => [
-							new Date(time[0]).toLocaleDateString(),
-							`total time: ${(
-								time[2] /
-								(1000 * 60 * 60)
-							).toFixed(2)} hours`,
-						])
-		},
-	},
-	methods: {
-		requestPinChange() {
-			this.showLightBox = true
-		},
-		async handleLightboxSubmit(e: PinData) {
-			this.showLightBox = false
-			if (e.currPin == e.newPin) {
-				alert('Pin cannot be the same')
-			} else if (e.currPin != this.pin) {
-				alert('current pin incorrect')
-			} else {
-				fetch('/changePin', {
-					method: 'POST',
-					headers: [['Content-Type', 'application/json']],
-					body: JSON.stringify({
-						pin: this.pin,
-						newPin: e.newPin,
-					}),
-				}).then(async res => {
-					if (res.ok) {
-						Cookies.set('pin', e.newPin.toString())
-						this.getUserInfo()
-					} else {
-						alert(
-							'something went wrong' + (await res.text()),
-						)
-					}
-				})
-			}
-		},
-		handleLightboxCancel() {
-			this.showLightBox = false
-			console.log('cancelled')
-		},
-		async changeName() {
-			fetch('/changeName', {
-				method: 'POST',
-				headers: [['Content-Type', 'application/json']],
-				body: JSON.stringify(<changeNameInfo>{
-					pin: this.pin,
-					newName: this.newName,
-				}),
-			}).then(async res => {
-				alert(
-					res.ok
-						? 'name changed successfully'
-						: await res.text(),
-				)
-				this.getUserInfo()
-			})
-			this.clearInputs()
-		},
-		async changeTitle() {
-			fetch('/changeTitle', {
-				method: 'POST',
-				headers: [['Content-Type', 'application/json']],
-				body: JSON.stringify(<changeTitleInfo>{
-					pin: this.pin,
-					newTitle: this.newTitle,
-				}),
-			}).then(async res => {
-				alert(
-					res.ok
-						? 'title changed successfully'
-						: await res.text(),
-				)
-				this.getUserInfo()
-			})
-			this.clearInputs()
-		},
-		async getUserInfo() {
-			if (this.pin != undefined) {
-				const fetched: { data: UserData; found: boolean } =
-					await fetch('/getUser', {
-						method: 'POST',
-						headers: [['Content-Type', 'application/json']],
-						body: JSON.stringify({
-							pin: parseInt(this.pin),
-						}),
-					}).then(res => res.json())
-
-				this.userInfo = fetched.data
-				this.isLoggedIn = fetched.found
-			} else {
-				this.isLoggedIn = false
-			}
-		},
-		showAllTimes() {
-			this.numTimesShown = Infinity
-		},
-		clearInputs() {
-			this.newName = ''
-			this.newTitle = ''
-		},
-	},
-	async mounted() {
-		await this.getUserInfo()
-		console.log('mounted')
-	},
-	async created() {
-		await this.getUserInfo()
-	},
+const err = () => {
+	throw new Error()
 }
+
+const newName = ref('')
+const newTitle = ref('')
+const isLoggedIn = ref(false)
+const userInfo = ref<UserData >([0,"","",[]])
+const showLightBox = ref(false)
+const numTimesShown = ref(15)
+const pin = ref(parseInt(Cookies.get('pin') ?? err()))
+
+function topTimes() {
+	return !userInfo.value
+		? []
+		: userInfo.value[3]
+				.map(time => [...time, time[1] - time[0]])
+				.sort((a, b) => b[2] - a[2])
+				.slice(0, numTimesShown.value)
+				.map(time => [
+					new Date(time[0]).toLocaleDateString(),
+					`total time: ${(
+						time[2] /
+						(1000 * 60 * 60)
+					).toFixed(2)} hours`,
+				])
+}
+
+function requestPinChange() {
+	showLightBox.value = true
+}
+
+async function handleLightboxSubmit(e: PinData) {
+	showLightBox.value = false
+	if (e.currPin == e.newPin) {
+		alert('Pin cannot be the same')
+	} else if (e.currPin != pin.value) {
+		alert('current pin incorrect')
+	} else {
+		const res = await fetch('/changePin', {
+			method: 'POST',
+			body: JSON.stringify({
+				pin: pin.value,
+				newPin: e.newPin,
+			}),
+		})
+		if (res.ok) {
+			Cookies.set('pin', e.newPin.toString())
+			getUserInfo()
+		} else {
+			alert('something went wrong' + (await res.text()))
+		}
+	}
+}
+
+function handleLightboxCancel() {
+	showLightBox.value = false
+	console.log('cancelled')
+}
+async function changeName() {
+	fetch('/changeName', {
+		method: 'POST',
+		body: JSON.stringify(<changeNameInfo>{
+			pin: pin.value,
+			newName: newName.value,
+		}),
+	}).then(async res => {
+		alert(
+			res.ok
+				? 'name changed successfully'
+				: await res.text(),
+		)
+		getUserInfo()
+	})
+	clearInputs()
+}
+async function changeTitle() {
+	fetch('/changeTitle', {
+		method: 'POST',
+		headers: [['Content-Type', 'application/json']],
+		body: JSON.stringify(<changeTitleInfo>{
+			pin: pin.value,
+			newTitle: newTitle.value,
+		}),
+	}).then(async res => {
+		alert(
+			res.ok
+				? 'title changed successfully'
+				: await res.text(),
+		)
+		getUserInfo()
+	})
+	clearInputs()
+}
+
+async function getUserInfo() {
+	if (pin.value) {
+		const fetched: { data: UserData; found: boolean } =
+			await fetch('/getUser', {
+				method: 'POST',
+				headers: [['Content-Type', 'application/json']],
+				body: JSON.stringify({
+					pin: pin.value,
+				}),
+			}).then(res => res.json())
+
+		userInfo.value = fetched.data
+		isLoggedIn.value = fetched.found
+	} else {
+		isLoggedIn.value = false
+	}
+}
+
+function showAllTimes() {
+	numTimesShown.value = Infinity
+}
+
+function clearInputs() {
+	newName.value = ''
+	newTitle.value = ''
+}
+
+onMounted(getUserInfo)
 </script>
 
 <style scoped>

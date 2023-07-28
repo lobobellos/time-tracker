@@ -2,7 +2,7 @@
 	<div class="container">
 		<h1>Rankings:</h1>
 		<div v-if="data != null && data.length > 0">
-			<div class="user" v-for="[i, v] in data.entries()" >
+			<div class="user" v-for="[i, v] in data.entries()">
 				<div class="rank">
 					{{ i + 1 }}
 				</div>
@@ -22,11 +22,14 @@
 
 <script setup lang="ts">
 
-	const data = ref<any[]| null>(null)
-	onMounted(async () => {
-		data.value = (await $fetch<any[]>('/data'))
-	})
-	
+
+const { data, pending, refresh } = await useAsyncData(
+	'data',
+	async () => {
+		const apiData = await $fetch('/api/data')
+		return apiData
+	},
+)
 </script>
 
 <style scoped>
