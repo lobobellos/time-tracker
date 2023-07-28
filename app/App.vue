@@ -1,12 +1,8 @@
-<script setup lang="ts">
-import Top from './components/Top.vue'
-</script>
-
 <template>
 	<div class="container">
 		<Top />
 		<div class="router-container">
-			<router-view></router-view>
+			<NuxtPage />
 		</div>
 	</div>
 </template>
