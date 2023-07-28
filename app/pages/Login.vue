@@ -19,22 +19,21 @@
 </template>
 
 <script setup lang="ts">
-import Cookies from 'js-cookie'
-
 const userPin = ref<string | null>(null)
-const userData = ref<UserData | null>(null)
-
-onMounted(() => {
-	userPin.value = Cookies.get('pin') ?? null
-})
 
 async function login(e: Event) {
 	e.preventDefault()
-	const {data} =<{ data?: UserData }> await $fetch('/login', {
+	$fetch('/api/login', {
 		method: 'POST',
 		body: {
 			pin: userPin.value,
 		},
+	}).then((res) => {
+		if (res.ok) {
+			alert(res.message)
+		}else{
+			alert("something went wrong: "+ res.message)
+		}
 	})
 }
 </script>

@@ -57,44 +57,35 @@
 	</p>
 </template>
 
-<script lang="ts">
-import Cookies from 'js-cookie'
+<script setup lang="ts">
 
-export default {
-	name: 'CreateAcct',
-	data() {
-		return {
-			name: '',
-			title: '',
-			pin: 0,
-			pin2: 0,
-		}
-	},
-	methods: {
-		async submitForm(e: Event) {
-			e.preventDefault()
-			if (this.pin != this.pin2) {
-				alert('pin does not match')
-				return
-			}
-			fetch('/create', {
-				method: 'POST',
-				headers: [['Content-Type', 'application/json']],
-				body: JSON.stringify({
-					name: this.name,
-					title: this.title,
-					pin: this.pin,
-				}),
-			}).then(async res => {
-				alert(res.ok ? 'account created' : await res.text())
+const name = ref('')
+const title = ref('')
+const pin = ref(0)
+const pin2 = ref(0)
 
-				if (res.ok) {
-					Cookies.set('pin', this.pin.toString())
-					this.$router.push('/login')
-				}
-			})
+async function submitForm(e: Event) {
+	e.preventDefault()
+	if (pin.value != pin2.value) {
+		alert('pin does not match')
+		return
+	}
+	 $fetch('/api/create', {
+		method: 'POST',
+		body: {
+			name: name.value,
+			title: title.value,
+			pin: pin.value,
 		},
-	},
+	}).then((res)=>{
+		if(res.ok){
+			alert('account created')
+		}else{
+			alert('something went wrong: '+ res.message)
+		}
+	})
+	
+	
 }
 </script>
 

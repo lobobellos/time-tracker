@@ -16,11 +16,6 @@ const lcd = new Lcd();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 app.use(express.json());
 
-app.get("/data", async (req, res) => {
-  res.type("json");
-  res.send(<privateUserData[]>(await getRawData()).map(el => el.splice(1)));
-});
-
 app.get("/fullData", async (req, res) => {
   if (req.headers['admin-password'] == process.env.ADMIN_PASSWORD) {
     res.send(await getRawData());
@@ -43,19 +38,6 @@ app.post("/publishData", async (req, res) => {
   }
 })
 
-
-
-app.post('/create', async (req, res) => {
-  try {
-    await addUser(req.body.pin, req.body.name, req.body.title);
-    res.sendStatus(201);
-  } catch (err) {
-    console.log(err);
-    res.status(400)
-    res.send(err);
-  }
-})
-
 app.post("/getUser", async (req, res) => {
   res.type("json");
   let data = await getUser(req.body.pin);
@@ -64,9 +46,6 @@ app.post("/getUser", async (req, res) => {
     found: data !== undefined
   })
 })
-
-
-
 
 app.post("/changeTitle", async (req: { body: changeTitleInfo }, res) => {
   console.log(req.body);
@@ -84,7 +63,6 @@ app.post("/changeTitle", async (req: { body: changeTitleInfo }, res) => {
 app.post('/isAdminPassword', async (req, res) => {
   res.send(req.body.password == process.env.ADMIN_PASSWORD)
 })
-
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, async () => {
