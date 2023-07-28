@@ -1,8 +1,14 @@
 <template>
 	<div class="container">
 		<h1>Rankings:</h1>
-		<div v-if="data != null && data.length > 0">
-			<div class="user" v-for="[i, v] in data.entries()">
+		<div v-if="pending">
+			<p>loading ...</p>
+		</div>
+		<div v-else-if="data?.length == 0">
+			<p>no data yet</p>
+		</div>
+		<div v-else>
+			<div class="user" v-for="[i, v] in data?.entries()">
 				<div class="rank">
 					{{ i + 1 }}
 				</div>
@@ -14,15 +20,10 @@
 				</div>
 			</div>
 		</div>
-		<div v-else>
-			<p>loading ...</p>
-		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-
-
 const { data, pending, refresh } = await useAsyncData(
 	'data',
 	async () => {
