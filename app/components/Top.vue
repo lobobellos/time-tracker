@@ -54,35 +54,27 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import Cookies from 'js-cookie'
 
-export default {
-	name: 'top',
-	created() {
-		window.onresize = () => {
-			this.width = window.innerWidth
-		}
-	},
-	data() {
-		return {
-			width: window.innerWidth,
-			isLoggedIn: Cookies.get('pin') != undefined,
-			dropdown: {
-				isOpen: false,
-				rotation: 0,
-			},
-		}
-	},
-	methods: {
-		dropdownToggle() {
-			this.dropdown.isOpen = !this.dropdown.isOpen
-			this.rotateImage()
-		},
-		rotateImage() {
-			this.dropdown.rotation = 90 - this.dropdown.rotation
-		},
-	},
+
+const width = ref(0)
+const isLoggedIn = ref(Cookies.get('pin') != undefined)
+const dropdown = ref({
+	isOpen: false,
+	rotation: 0,
+})
+
+window.addEventListener('resize', () => {
+	width.value = window.innerWidth
+})
+
+function dropdownToggle() {
+	dropdown.value.isOpen = !dropdown.value.isOpen
+	rotateImage()
+}
+function rotateImage() {
+	dropdown.value.rotation -= 90
 }
 </script>
 
