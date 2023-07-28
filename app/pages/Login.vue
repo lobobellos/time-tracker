@@ -1,6 +1,6 @@
 <template>
 	<h1>Login</h1>
-	<form v-on:submit="e => login(e)"></form>
+	<form v-on:submit="login"></form>
 	<label for="pin">Pin</label>
 	<br />
 	<input
@@ -18,41 +18,24 @@
 	</p>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import Cookies from 'js-cookie'
-import type { UserData } from '../dataManager.js'
 
-export default {
-	data() {
-		return {
-			userPin: null,
-			userData: null,
-		}
-	},
-	created() {
-		this.userPIN = Cookies.get('pin')
-	},
-	methods: {
-		async login(e: Event) {
-			e.preventDefault()
-			const data = await fetch('/login', {
-				method: 'POST',
-				headers: [['Content-Type', 'application/json']],
-				body: JSON.stringify({
-					pin: this.userPin,
-				}),
-			})
-			const json: { data: UserData; found: boolean } =
-				await data.json()
-			if (json.found) {
-				alert('login successful. Welcome ' + json.data[1])
-				this.userData = json.data
-				this.$router.push('/myAcct')
-			} else {
-				alert('invalid pin')
-			}
+const userPin = ref<string | null>(null)
+const userData = ref<UserData | null>(null)
+
+onMounted(() => {
+	userPin.value = Cookies.get('pin') ?? null
+})
+
+async function login(e: Event) {
+	e.preventDefault()
+	const {data} =<{ data?: UserData }> await $fetch('/login', {
+		method: 'POST',
+		body: {
+			pin: userPin.value,
 		},
-	},
+	})
 }
 </script>
 
