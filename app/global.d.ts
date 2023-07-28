@@ -24,3 +24,7 @@ declare interface changeTitleInfo {
   pin: number;
   newTitle: string;
 }
+
+declare interface loginInfo {
+  pin: number;
+}
