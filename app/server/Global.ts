@@ -2,15 +2,10 @@ import {config} from 'dotenv'
 config()
 import Client from '@replit/database'
 
-
-console.log("database URL: ",process.env?.REPLIT_DB_URL ? 'defined': 'undefined')
-console.log("admin password: ",process.env?.ADMIN_PASSWORD ? 'defined': 'undefined')
-
 if(process.env?.REPLIT_DB_URL == undefined) throw new Error('REPLIT_DB_URL is not defined')
 if(process.env?.ADMIN_PASSWORD == undefined) throw new Error('ADMIN_PASSWORD is not defined')
 
 export default class Global{
-
   private static _db = new Client(process.env?.REPLIT_DB_URL)
   private static _adminPassword = process.env.ADMIN_PASSWORD
 
