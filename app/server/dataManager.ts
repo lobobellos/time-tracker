@@ -1,12 +1,4 @@
-import {config} from 'dotenv'
-config()
-
-import Client from '@replit/database'
-
-if(process.env?.REPLIT_DB_URL == undefined) throw new Error('REPLIT_DB_URL is not defined')
-
-console.log("database URL: ",process.env?.REPLIT_DB_URL)
-let db =new Client(process.env?.REPLIT_DB_URL)
+import Global from "./Global";
 
 export class PrivateUser {
   name: string;
@@ -140,7 +132,7 @@ export async function deleteUser(pin: number) {
 }
 
 export async function getRawData(): Promise<UserData[]> {
-  const data =<UserData[]> await db.get("users")
+  const data =<UserData[]> await Global.db.get("users")
   console.log('straight data:', data, typeof data)
   if(typeof data === 'string') return JSON.parse(data)
   return data
@@ -155,7 +147,7 @@ export async function getSortedData() {
 }
 
 export function writeData(data: UserData[]) {
-  db.set("users", data)
+  Global.db.set("users", data)
 }
 
 export const exampleData: privateUserData[] = [
