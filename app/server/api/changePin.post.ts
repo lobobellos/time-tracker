@@ -5,6 +5,7 @@ export default defineEventHandler(async (event) => {
   let {pin, newPin} = await readBody(event);
   try {
     await changeUserPin(pin, newPin);
+    setCookie(event, "pin", newPin)
     return {
       ok:true,
       message:'pin changed successfully'
