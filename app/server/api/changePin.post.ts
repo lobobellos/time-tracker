@@ -2,14 +2,17 @@ import { changeUserPin } from "../dataManager";
 
 export default defineEventHandler(async (event) => {
   console.log("pin being changed")
-  
-  let {pin, newPin} =  await readBody(event);
+  let {pin, newPin} = await readBody(event);
   try {
     await changeUserPin(pin, newPin);
-    setResponseStatus(event, 201);
+    return {
+      ok:true,
+      message:'pin changed successfully'
+    }
   } catch (err) {
-    console.log(err);
-    setResponseStatus(event, 400);
-    return err
+    return{
+      ok:false,
+      message: String(err)
+    }
   }
 })
