@@ -11,7 +11,6 @@
 	/>
 	<br />
 	<button v-on:click="login">login</button>
-
 	<p>
 		No account?
 		<router-link to="/createAcct">create one</router-link>
@@ -31,6 +30,7 @@ async function login(e: Event) {
 	}).then((res) => {
 		if (res.ok) {
 			alert(res.message)
+			useRouter().push('/MyAcct')
 		}else{
 			alert("something went wrong: "+ res.message)
 		}
@@ -38,4 +38,3 @@ async function login(e: Event) {
 }
 </script>
 
-<style scoped></style>
