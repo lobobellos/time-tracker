@@ -1,8 +1,9 @@
 <template>
-	<div v-if="isLoggedIn" class="container">
+	<div v-if="!userInfo">loading...</div>
+	<div v-else class="container">
 		<h1>Hello, {{ userInfo[1] }}</h1>
 		<h4>{{ userInfo[2] }}</h4>
-		<button @click="requestPinChange" id="changePin">
+		<button @click="showLightBox = true" id="changePin">
 			Change Pin
 		</button>
 		<form
@@ -32,13 +33,6 @@
 			<button type="submit">Change</button>
 		</form>
 	</div>
-	<div class="container" v-else>
-		<h2>
-			You need to
-			<router-link to="/login">login</router-link>
-			to have an account page, silly
-		</h2>
-	</div>
 
 	<h3>Top Times</h3>
 	<br />
@@ -51,7 +45,7 @@
 	<button @click="showAllTimes">Show All</button>
 
 	<PinSelector
-		:pin="pin"
+		:pin="getPin()"
 		:show-lightbox="showLightBox"
 		@data="handleLightboxSubmit"
 		@cancel="handleLightboxCancel"
@@ -63,17 +57,32 @@ import Cookies from 'js-cookie'
 import PinSelector from '../components/PinSelector.vue'
 import type { PinData } from '../components/PinSelector.vue.js'
 
-const err = () => {
-	throw new Error()
-}
+if (!getPin()) useRouter().push('/login')
 
 const newName = ref('')
 const newTitle = ref('')
-const isLoggedIn = ref(false)
-const userInfo = ref<UserData >([0,"","",[]])
 const showLightBox = ref(false)
 const numTimesShown = ref(15)
-const pin = ref(parseInt(Cookies.get('pin') ?? err()))
+
+function getPin() {
+	return Number(Cookies.get('pin') ?? (()=>{throw new Error('something went wrong')})())
+}
+
+const {
+	data: userInfo,
+	pending,
+	refresh,
+} = useAsyncData('userInfo', async () => {
+	const { data } = await $fetch('/api/getUser', {
+		method: 'POST',
+		body: {
+			pin: getPin(),
+		},
+	})
+	if (!getPin()) useRouter().push('/login')
+	console.log(data)
+	return data
+})
 
 function topTimes() {
 	return !userInfo.value
@@ -91,30 +100,27 @@ function topTimes() {
 				])
 }
 
-function requestPinChange() {
-	showLightBox.value = true
-}
-
 async function handleLightboxSubmit(e: PinData) {
 	showLightBox.value = false
 	if (e.currPin == e.newPin) {
 		alert('Pin cannot be the same')
-	} else if (e.currPin != pin.value) {
+	} else if (e.currPin != getPin()) {
 		alert('current pin incorrect')
 	} else {
-		const res = await fetch('/changePin', {
+		$fetch('/api/changePin', {
 			method: 'POST',
-			body: JSON.stringify({
-				pin: pin.value,
+			body: {
+				pin: getPin(),
 				newPin: e.newPin,
-			}),
+			},
+		}).then(res => {
+			if (res.ok) {
+				Cookies.set('pin', e.newPin.toString())
+				refresh()
+			} else {
+				alert('something went wrong' + res.message)
+			}
 		})
-		if (res.ok) {
-			Cookies.set('pin', e.newPin.toString())
-			getUserInfo()
-		} else {
-			alert('something went wrong' + (await res.text()))
-		}
 	}
 }
 
@@ -122,58 +128,40 @@ function handleLightboxCancel() {
 	showLightBox.value = false
 	console.log('cancelled')
 }
+
 async function changeName() {
-	fetch('/changeName', {
+	$fetch('/api/changeName', {
 		method: 'POST',
-		body: JSON.stringify(<changeNameInfo>{
-			pin: pin.value,
+		body: {
+			pin: getPin(),
 			newName: newName.value,
-		}),
+		},
 	}).then(async res => {
 		alert(
 			res.ok
 				? 'name changed successfully'
-				: await res.text(),
+				: res.message
 		)
-		getUserInfo()
+		refresh()
 	})
 	clearInputs()
 }
-async function changeTitle() {
-	fetch('/changeTitle', {
+function changeTitle() {
+	$fetch('/api/changeTitle', {
 		method: 'POST',
-		headers: [['Content-Type', 'application/json']],
-		body: JSON.stringify(<changeTitleInfo>{
-			pin: pin.value,
+		body: {
+			pin: getPin(),
 			newTitle: newTitle.value,
-		}),
+		},
 	}).then(async res => {
 		alert(
 			res.ok
 				? 'title changed successfully'
-				: await res.text(),
+				: res.message,
 		)
-		getUserInfo()
+		refresh()
 	})
 	clearInputs()
-}
-
-async function getUserInfo() {
-	if (pin.value) {
-		const fetched: { data: UserData; found: boolean } =
-			await fetch('/getUser', {
-				method: 'POST',
-				headers: [['Content-Type', 'application/json']],
-				body: JSON.stringify({
-					pin: pin.value,
-				}),
-			}).then(res => res.json())
-
-		userInfo.value = fetched.data
-		isLoggedIn.value = fetched.found
-	} else {
-		isLoggedIn.value = false
-	}
 }
 
 function showAllTimes() {
@@ -184,8 +172,6 @@ function clearInputs() {
 	newName.value = ''
 	newTitle.value = ''
 }
-
-onMounted(getUserInfo)
 </script>
 
 <style scoped>
