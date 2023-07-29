@@ -1,4 +1,4 @@
-import { changeUserPin } from "../dataManager";
+import { changeUserPin } from "../../dataManager";
 
 export default defineEventHandler(async (event) => {
   console.log("pin being changed")

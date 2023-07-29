@@ -1,4 +1,4 @@
-import { changeTitle } from "../dataManager";
+import { changeTitle } from "../../dataManager";
 
 export default defineEventHandler(async (event) => {
   console.log('title change request')

@@ -1,4 +1,4 @@
-import { changeName } from "../dataManager";
+import { changeName } from "../../dataManager";
 
 export default defineEventHandler(async (event) => {
   let {pin, newName} =<changeNameInfo> await readBody(event);

@@ -107,7 +107,7 @@ async function handleLightboxSubmit(e: PinData) {
 	} else if (e.currPin != getPin()) {
 		alert('current pin incorrect')
 	} else {
-		$fetch('/api/changePin', {
+		$fetch('/api/change/pin', {
 			method: 'POST',
 			body: {
 				pin: getPin(),
@@ -130,7 +130,7 @@ function handleLightboxCancel() {
 }
 
 async function changeName() {
-	$fetch('/api/changeName', {
+	$fetch('/api/change/name', {
 		method: 'POST',
 		body: {
 			pin: getPin(),
@@ -147,7 +147,7 @@ async function changeName() {
 	clearInputs()
 }
 function changeTitle() {
-	$fetch('/api/changeTitle', {
+	$fetch('/api/change/title', {
 		method: 'POST',
 		body: {
 			pin: getPin(),
