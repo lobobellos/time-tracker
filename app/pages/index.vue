@@ -1,14 +1,14 @@
 <template>
 	<div class="container">
 		<h1>Rankings:</h1>
-		<div v-if="pending">
+		<div v-if="!data">
 			<p>loading ...</p>
 		</div>
-		<div v-else-if="data?.length == 0">
+		<div v-else-if="data.length == 0">
 			<p>no data yet</p>
 		</div>
 		<div v-else>
-			<div class="user" v-for="[i, v] in data?.entries()">
+			<div class="user" v-for="[i, v] in data.entries()">
 				<div class="rank">
 					{{ i + 1 }}
 				</div>
@@ -27,8 +27,10 @@
 const { data, pending, refresh } = await useAsyncData(
 	'data',
 	async () => {
-		const apiData = await $fetch('/api/data')
-		return apiData
+		const {ok,message,data} = await $fetch('/api/data')
+		if(ok) return data
+		alert( message)
+		throw message
 	},
 )
 </script>
