@@ -12,12 +12,11 @@
 	</form>
 	<div v-if="correctPass.data.value">
 		<textarea name="" id="" v-model="textArea"></textarea>
-		<button @click="publishData">submit new data</button>
+		<button @click="drop">drop</button>
 	</div>
 </template>
 
 <script setup lang="ts">
-import beautify from 'json-beautify'
 
 const adminPass = ref('')
 const textArea = ref('')
@@ -31,57 +30,21 @@ const correctPass = useAsyncData(
 				password: adminPass.value,
 			},
 		}).then(async res => {
-			if (res) fullData.refresh()
 			console.log('correct?', res)
 			return res
 		})
 	},
 )
 
-const fullData = useAsyncData('fulluserInfo', async () => {
-	$fetch('/api/admin/fullData', {
-		method: 'GET',
-		headers: [['admin-password', adminPass.value]],
-	}).then(async res => {
-		if (res.ok) {
-			alert(res.message)
-			textArea.value = beautify(res?.data, [], 2, 1e2)
-		}
-		console.log('fullData', res)
+function drop(){
+	$fetch('/api/admin/drop',{
+		method:"POST",
+		body:{
+			password:adminPass.value
+		},
 	})
-})
-
-async function publishData() {
-	try {
-		JSON.parse(textArea.value)
-	} catch (err) {
-		alert('invalid json')
-		return
-	}
-	if (
-		['yes', 'y', 'ye', 'yeah'].includes(
-			String(
-				prompt(
-					"are you sure? type 'yes' to confirm",
-				)?.toLowerCase(),
-			),
-		)
-	) {
-		await $fetch('/api/admin/setData', {
-			method: 'POST',
-			body: {
-				password: adminPass.value,
-				data: JSON.parse(textArea.value),
-			},
-		}).then(async res => {
-			if (res.ok) {
-				alert('data published')
-			} else {
-				alert('Error' + res.message)
-			}
-		})
-	}
 }
+
 </script>
 
 <style scoped>
