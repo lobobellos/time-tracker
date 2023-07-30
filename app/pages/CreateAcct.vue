@@ -64,6 +64,8 @@ const title = ref('')
 const pin = ref(0)
 const pin2 = ref(0)
 
+
+
 async function submitForm(e: Event) {
 	e.preventDefault()
 	if (pin.value != pin2.value) {
@@ -73,7 +75,7 @@ async function submitForm(e: Event) {
 	 $fetch('/api/create', {
 		method: 'POST',
 		body: {
-			name: name.value,
+			name: Number(name.value),
 			title: title.value,
 			pin: pin.value,
 		},
