@@ -1,11 +1,13 @@
-import dotenv from 'dotenv'
-dotenv.config()
-import { getRawData, writeData } from './dataManager.js'
-import chalk from 'chalk'
+import Global from './Global.js'
+import gpio from 'rpi-gpio'
+import Lcd from './lcd.js'
 
-if (process.env.IS_PROD == 'true') {
-  const gpio = (await import('rpi-gpio')).default
-
+export async function init() {
+  let lastPin: null | number = null
+  let tempPin = ""
+  let clockedIn = new Map<number, number>() //pin, timestamp
+  let pressedRecently = false;
+  
   await gpio.promise.setup(7, gpio.DIR_IN, gpio.EDGE_RISING)
   await gpio.promise.setup(11, gpio.DIR_IN, gpio.EDGE_RISING)
 
@@ -23,19 +25,26 @@ if (process.env.IS_PROD == 'true') {
       }
     } else if (rpipin == 11) {
       //clock out
-      if (clockedIn.has(lastPin)) {
-        const data = (await getRawData())
-        const el = data.find(el => el[0] == lastPin)
-        const t: time = [
+      if (lastPin && clockedIn.has(lastPin) ) {
+        const time: time = [
           <number>clockedIn.get(lastPin),
           Date.now()
         ]
-        if (el != undefined && isvalid(t)) {
-          el[3].push(t)
-        }
-        await writeData(data)
-        clockedIn.delete(lastPin)
-        console.log(data[3])
+        if (isvalid(time)) fetch(Global.prodUrl+"/api/client/addTime", {
+          method: "POST",
+          headers: [['Content-Type', 'application/json']],
+          body: JSON.stringify({
+            time,
+            pin:lastPin
+          })
+        }).then(async res => {
+          if (res.ok) {
+            Lcd.line1 = "login succesfull"
+          }else{
+            Lcd.line1 = await res.text()
+          }
+        })
+
       }
     }
   })
@@ -55,26 +64,24 @@ if (process.env.IS_PROD == 'true') {
 
   //@ts-ignore
   const GK = (await import("global-keypress")).default
-
   const gk = new GK();
 
   // launch keypress daemon process
   gk.start();
 
-  gk.on('press', (data: any) => {
-    console.log(data.data)
+  gk.on('press', ({ data }: any) => {
+    console.log(data)
 
-    if (data.data == "<KPEnter>" && tempPin != '') {
+    if (data == "<KPEnter>" && tempPin != '') {
       lastPin = parseInt(tempPin)
       tempPin = ""
       setTimeout(() => lastPin = null, 10_000)
     } else {
-      tempPin += (parseInt(KEYSTATETABLE[data.data] ?? "") || "").toString()
+      tempPin += (parseInt(KEYSTATETABLE[data] ?? "") || "").toString()
     }
     console.log(tempPin)
     console.log(lastPin)
   })
-
 
   // process error
   gk.on('error', error => {
@@ -87,21 +94,11 @@ if (process.env.IS_PROD == 'true') {
   });
 }
 
-
-type pin = number
-type timestamp = number
-
-let lastPin: null | number = null
-let tempPin = ""
-let clockedIn = new Map<pin, timestamp>()
-
-let pressedRecently = false;
-
-console.log(chalk.blueBright("starting inputListener"))
-
 function isvalid(t: time): boolean {
   let [start, end] = t
   const day = 24 * 60 * 60 * 1000
   return (new Date(start)).getDay() == (new Date(end)).getDay() &&
     end - start < day
 }
+
+
