@@ -35,15 +35,13 @@ const { data, pending, refresh } = await useAsyncData(
 )
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 h1 {
 	font-weight: bold;
 }
-
 .container {
 	background-color: rgb(216, 192, 231);
 }
-
 .user {
 	background-color: rgb(
 		216,
@@ -54,25 +52,22 @@ h1 {
 	flex-direction: row;
 	font-family: 'Fira Sans', sans-serif;
 	margin-bottom: 1rem; /* Increase the space between each box */
-}
-
-.user .rank {
-	background-color: rgb(
-		92,
-		37,
-		180
-	); /* Set the darker purple background */
-	color: white;
-	padding: 1rem;
-	margin-right: 1rem; /* Increase the space between rank and data */
-}
-
-.user .data {
-	margin: 0.2rem;
-}
-
-.data h3,
-.data p {
-	margin: 0;
+	.rank {
+		background-color: rgb(
+			92,
+			37,
+			180
+		); /* Set the darker purple background */
+		color: white;
+		padding: 1rem;
+		margin-right: 1rem; /* Increase the space between rank and data */
+	}
+	.data {
+		margin: 0.2rem;
+		h3,
+		p {
+			margin: 0;
+		}
+	}
 }
 </style>
