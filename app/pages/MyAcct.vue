@@ -81,6 +81,7 @@ const {
 	})
 	if (!getID()) useRouter().push('/login')
 	console.log(data)
+	//@ts-ignore
 	return data
 })
 
