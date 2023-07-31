@@ -7,7 +7,7 @@ interface IRequestBody {
 
 export default defineEventHandler(async (event) => {
   const {pin, name, title} = await readBody<IRequestBody>(event)
-  console.log("now account creation occuring", pin, name, title)
+  console.log("trying to create acct", pin, name, title)
   
   try {
     const userData = await users.findOne({
@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
         roomTimes:[]
       });
       
-      setCookie(event, "pin", pin.toString())
+      setCookie(event, "id", pin.toString())
       return {
         ok: true,
         message: "account created"
