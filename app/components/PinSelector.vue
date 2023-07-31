@@ -7,7 +7,7 @@
 				<input
 					type="number"
 					id="currPin"
-					v-model.number="curentPin"
+					v-model.number="currentPin"
 					required
 				/>
 				<label for="newpin">New Pin</label>
@@ -20,56 +20,53 @@
 				/>
 				<div class="escapeOptions">
 					<button type="submit">Submit</button>
-					<button @click="handleCancel">Cancel</button>
+					<button @click.prevent="handleCancel">Cancel</button>
 				</div>
 			</form>
 		</div>
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 export interface PinData {
 	currPin: number
 	newPin: number
 }
-export default {
-	name: 'pinSelector',
-	props: {
-		pin: {
-			required: true,
-		},
-		showLightbox: {
-			required: true,
-		},
+defineProps({
+	pin: {
+		type: Number,
+		required: true,
 	},
-	data() {
-		return {
-			curentPin: <number>null,
-			newPin: <number>null,
-		}
+	showLightbox: {
+		type: Boolean,
+		required: true,
 	},
-	methods: {
-		handleSubmit(e: Event) {
-			e.preventDefault()
-			this.$emit('data', <PinData>{
-				currPin: this.curentPin,
-				newPin: this.newPin,
-			})
-			this.clearFields()
-		},
-		handleCancel() {
-			this.$emit('cancel')
-			this.clearFields()
-		},
-		clearFields() {
-			this.curentPin = null
-			this.newPin = null
-		},
-	},
+})
+const emits = defineEmits<{
+	(event: 'data', data: PinData): void
+	(event: 'cancel'): void
+}>()
+const currentPin = ref<number | null>(null)
+const newPin = ref<number | null>(null)
+function handleSubmit(e: Event) {
+	e.preventDefault()
+	emits('data', <PinData>{
+		currPin: currentPin.value,
+		newPin: newPin.value,
+	})
+	clearFields()
+}
+function handleCancel() {
+	emits('cancel')
+	clearFields()
+}
+function clearFields() {
+	currentPin.value = null
+	newPin.value = null
 }
 </script>
 
-<style>
+<style scoped lang="scss">
 .lightbox {
 	position: fixed;
 	top: 0;
@@ -80,18 +77,15 @@ export default {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	input {
+		display: block;
+		margin-bottom: 10px;
+	}
 }
-
 .lightbox-content {
 	background-color: white;
 	padding: 20px;
 }
-
-.lightbox input {
-	display: block;
-	margin-bottom: 10px;
-}
-
 .escapeOptions {
 	display: flex;
 	justify-content: space-between;
