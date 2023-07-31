@@ -27,9 +27,9 @@
 const { data, pending, refresh } = await useAsyncData(
 	'data',
 	async () => {
-		const {ok,message,data} = await $fetch('/api/data')
-		if(ok) return data
-		alert( message)
+		const { ok, message, data } = await $fetch('/api/data')
+		if (ok) return data
+		alert(message)
 		throw message
 	},
 )

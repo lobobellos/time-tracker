@@ -17,7 +17,6 @@
 </template>
 
 <script setup lang="ts">
-
 const adminPass = ref('')
 const textArea = ref('')
 
@@ -35,16 +34,14 @@ const correctPass = useAsyncData(
 		})
 	},
 )
-
-function drop(){
-	$fetch('/api/admin/drop',{
-		method:"POST",
-		body:{
-			password:adminPass.value
+function drop() {
+	$fetch('/api/admin/drop', {
+		method: 'POST',
+		body: {
+			password: adminPass.value,
 		},
 	})
 }
-
 </script>
 
 <style scoped>
