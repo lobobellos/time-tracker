@@ -1,18 +1,21 @@
-import { changeUserPin } from "../../dataManager";
+import users from '../../dbModels/user'
 
 export default defineEventHandler(async (event) => {
   console.log("pin being changed")
-  let {pin, newPin} = await readBody(event);
+  let { id, newPin } = await readBody(event);
   try {
-    await changeUserPin(pin, newPin);
-    setCookie(event, "pin", newPin)
+    if (await users.findOne({ pin: newPin })) return {
+      ok: false,
+      message: 'that pin already exists!'
+    }
+    await users.findByIdAndUpdate(id, { pin: newPin })
     return {
-      ok:true,
-      message:'pin changed successfully'
+      ok: true,
+      message: 'pin changed successfully'
     }
   } catch (err) {
-    return{
-      ok:false,
+    return {
+      ok: false,
       message: String(err)
     }
   }
