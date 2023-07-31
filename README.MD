@@ -1,6 +1,5 @@
 # Time-Tracker
-
-![GitHub CI](https://github.com/lobobellos/time-tracker/actions/workflows/buildtest.yml/badge.svg) ![GitHub](https://img.shields.io/github/license/lobobellos/time-tracker)<br>
+![GitHub](https://img.shields.io/github/license/lobobellos/time-tracker)<br>
 A little device to clock people in and out of the robotics lab
 
 [
@@ -22,10 +21,9 @@ This includes:
 This project uses multiple technologies for the different parts of it. Here's a breakdown:
 
 - Frontend
-  - [VueJS](https://vuejs.org/)
+  - [Nuxt](https://nuxt.com/)
 - Backend
-  - [ExpressJS](https://expressjs.com/)
-  - [ViteJS](https://vitejs.dev/)
+  - [Nuxt](https://nuxt.com/)
 - Hardware
   - [Rasberry Pi](https://www.raspberrypi.com/)
   - [Sparkfun LCD](https://www.mouser.com/ProductDetail/SparkFun/LCD-00255?qs=WyAARYrbSnZUIzZ3sJcVBQ%3D%3D&mgh=1)
