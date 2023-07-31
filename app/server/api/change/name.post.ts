@@ -1,9 +1,9 @@
-import { changeName } from "../../dataManager";
+import users from '../../dbModels/user'
 
 export default defineEventHandler(async (event) => {
-  let {pin, newName} =<changeNameInfo> await readBody(event);
+  const {id, newName} = await readBody(event);
   try {
-    await changeName(pin,newName);
+    await users.findByIdAndUpdate(id,{name:newName})
     return{
       ok: true,
       message: "name changed"

@@ -1,10 +1,10 @@
-import { changeTitle } from "../../dataManager";
+import users from '../../dbModels/user'
 
 export default defineEventHandler(async (event) => {
   console.log('title change request')
-  const { pin, newTitle } = <changeTitleInfo>await readBody(event)
+  const { id, newTitle } = await readBody(event)
   try {
-    await changeTitle(pin, newTitle);
+    await users.findByIdAndUpdate(id,{title:newTitle})
     return{
       ok: true,
       message: "title changed"
