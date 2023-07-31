@@ -57,7 +57,6 @@
 <script setup lang="ts">
 import Cookies from 'js-cookie'
 
-
 const width = ref(0)
 const isLoggedIn = ref(Cookies.get('id') != undefined)
 const dropdown = ref({
@@ -68,7 +67,6 @@ const dropdown = ref({
 window.addEventListener('resize', () => {
 	width.value = window.innerWidth
 })
-
 function dropdownToggle() {
 	dropdown.value.isOpen = !dropdown.value.isOpen
 	rotateImage()
@@ -85,36 +83,30 @@ function rotateImage() {
 	flex-direction: row;
 	background-color: rgb(165, 109, 218);
 }
-
 .containerSpread a {
 	margin-left: 0.4rem;
 	margin-right: 0.4rem;
 }
-
 .dropdown {
 	background-color: rgb(165, 109, 218);
 	padding: 0.5rem;
 }
-
 #logo {
 	align-self: left;
 	width: 50px;
 }
-
 .threeLineContainer {
 	display: flex;
 	margin-left: auto;
 	margin-right: 1rem;
 	align-items: center;
 }
-
 #threeLines {
 	width: 50px;
 	height: 50px;
 	transition: transform 100ms ease-in-out;
 	clip: rect(0, 50, 0, 50);
 }
-
 a {
 	margin-bottom: 0.5rem;
 	font-family: 'Fira Sans', sans-serif;
