@@ -5,26 +5,15 @@
   "type": "module",
   "main": "index.ts",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview",
-    "start": "node --no-warnings --loader ts-node/esm index.ts",
-    "server": "node --no-warnings --loader ts-node/esm server.ts",
-    "create-data": "node --no-warnings --loader ts-node/esm scripts/resetData.ts",
-    "inputListen": "node --no-warnings --loader ts-node/esm inputListener.ts",
-    "watchData": "node --no-warnings --loader ts-node/esm scripts/watchData.ts"
+    "start": "node --no-warnings --loader ts-node/esm index.ts"
   },
   "dependencies": {
     "@futpib/node-global-key-listener": "^1.0.3",
     "@types/rpi-gpio": "^2.1.1",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "js-cookie": "^3.0.5"
+    "dotenv": "^16.0.3"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
-    "@types/express": "^4.17.17",
-    "@types/js-cookie": "^3.0.3",
     "chalk": "^5.2.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
