@@ -183,36 +183,31 @@ function clearInputs() {
 		margin-top: 0.25rem;
 	}
 }
-
-
 .changeSomething {
 	margin-top: 1rem;
 	display: flex;
 	flex-direction: row;
-
 	label {
 		margin-left: 0;
 	}
-
 	input {
-	background-color: #c3a6df;
-	border: 2px solid blueviolet;
-	border-radius: 0.3rem;
+		background-color: #c3a6df;
+		border: 2px solid blueviolet;
+		border-radius: 0.3rem;
+	}
+	input::placeholder {
+		color: rgb(85, 85, 85);
+	}
+	* {
+		margin-left: 0.2rem;
+		margin-right: 0.2rem;
 	}
 }
-
-
-.changeSomething * {
-	margin-left: 0.2rem;
-	margin-right: 0.2rem;
-}
-
 #changePin {
-	margin-top:1rem;
+	margin-top: 1rem;
 	padding: 0.5rem;
 	border-radius: 0.5rem;
 }
-
 button {
 	margin-top: 0rem;
 	font-family: 'Fira sans';
@@ -232,22 +227,12 @@ button {
 button:hover {
 	background-position: 0 -100%; /* Move gradient upwards */
 }
-
-
-
-
-
-.changeSomething input::placeholder {
-	color: rgb(85, 85, 85);
-}
-
 .times {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: center;
 }
-
 .time {
 	font-family: 'Fira sans';
 	text-align: center;
