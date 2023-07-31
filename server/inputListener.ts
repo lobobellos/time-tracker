@@ -2,6 +2,8 @@ import Global from './Global.js'
 import gpio from 'rpi-gpio'
 import Lcd from './lcd.js'
 
+type time = [number,number]
+
 export async function init() {
   let lastPin: null | number = null
   let tempPin = ""
