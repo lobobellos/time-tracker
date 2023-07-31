@@ -3,9 +3,6 @@
 	<div v-else class="container">
 		<h1>Hello, {{ userInfo.name }}</h1>
 		<h4>{{ userInfo.title }}</h4>
-		<button @click="showLightBox = true" id="changePin">
-			Change Pin
-		</button>
 		<form
 			class="changeSomething"
 			@submit.prevent="changeName"
@@ -33,6 +30,9 @@
 			<button type="submit">Change</button>
 		</form>
 	</div>
+	<button @click="showLightBox = true" id="changePin">
+		Change Pin
+	</button>
 
 	<h3>Top Times</h3>
 	<br />
@@ -65,7 +65,12 @@ const showLightBox = ref(false)
 const numTimesShown = ref(15)
 
 function getID() {
-	return Cookies.get('id') ?? (()=>{throw new Error('no id found')})()
+	return (
+		Cookies.get('id') ??
+		(() => {
+			throw new Error('no id found')
+		})()
+	)
 }
 
 const {
@@ -132,14 +137,12 @@ async function changeName() {
 	$fetch('/api/change/name', {
 		method: 'POST',
 		body: {
-			pin: getID(),
+			id: getID(),
 			newName: newName.value,
 		},
 	}).then(async res => {
 		alert(
-			res.ok
-				? 'name changed successfully'
-				: res.message
+			res.ok ? 'name changed successfully' : res.message,
 		)
 		refresh()
 	})
@@ -154,9 +157,7 @@ function changeTitle() {
 		},
 	}).then(async res => {
 		alert(
-			res.ok
-				? 'title changed successfully'
-				: res.message,
+			res.ok ? 'title changed successfully' : res.message,
 		)
 		refresh()
 	})
@@ -173,20 +174,33 @@ function clearInputs() {
 }
 </script>
 
-<style scoped>
-.container h1 {
-	margin-bottom: 0;
+<style scoped lang="scss">
+.container {
+	h1 {
+		margin-bottom: 0;
+	}
+	h4 {
+		margin-top: 0.25rem;
+	}
 }
 
-.container h4 {
-	margin-top: 0.25rem;
-}
 
 .changeSomething {
 	margin-top: 1rem;
 	display: flex;
 	flex-direction: row;
+
+	label {
+		margin-left: 0;
+	}
+
+	input {
+	background-color: #c3a6df;
+	border: 2px solid blueviolet;
+	border-radius: 0.3rem;
+	}
 }
+
 
 .changeSomething * {
 	margin-left: 0.2rem;
@@ -194,11 +208,13 @@ function clearInputs() {
 }
 
 #changePin {
+	margin-top:1rem;
 	padding: 0.5rem;
 	border-radius: 0.5rem;
 }
 
 button {
+	margin-top: 0rem;
 	font-family: 'Fira sans';
 	font-weight: 600;
 	background-color: #a56dda;
@@ -217,15 +233,9 @@ button:hover {
 	background-position: 0 -100%; /* Move gradient upwards */
 }
 
-.changeSomething label {
-	margin-left: 0;
-}
 
-.changeSomething input {
-	background-color: #c3a6df;
-	border: 2px solid blueviolet;
-	border-radius: 0.3rem;
-}
+
+
 
 .changeSomething input::placeholder {
 	color: rgb(85, 85, 85);
