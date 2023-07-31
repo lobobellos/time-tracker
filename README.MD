@@ -24,6 +24,8 @@ This project uses multiple technologies for the different parts of it. Here's a 
   - [Nuxt](https://nuxt.com/)
 - Backend
   - [Nuxt](https://nuxt.com/)
+- Database
+  - [MongoDB](mongodb.com)
 - Hardware
   - [Rasberry Pi](https://www.raspberrypi.com/)
   - [Sparkfun LCD](https://www.mouser.com/ProductDetail/SparkFun/LCD-00255?qs=WyAARYrbSnZUIzZ3sJcVBQ%3D%3D&mgh=1)
@@ -44,17 +46,23 @@ This project uses multiple technologies for the different parts of it. Here's a 
 
 ### Steps
 
-- Clone directory onto raspberry pi with `git clone https://github.com/lobobellos/time-tracker.git`
-- `npm i` to install deps
-- `npm run create-data` to create empty database
-- `npm run build` to compile and minify
-- Create .env
-  - Set `ADMIN_PASSWORD`
-  - Set `IS_PROD = "false"`
-  - Set `PORT` Default is 8080
-  - Set `BUILT = "true"`
-- Give script execute perms with `chmod +x scripts/startTmux.sh`
-- Edit your `/etc/rc.local` file, to look like this, replacing `/absolute/path/` with your actual one, which will be something like `/home/pi/projects/time-tracker/` on a raspberrypi
+- Deploy on Vercel
+  - fork directory to your personal repo from https://github.com/lobobellos/time-tracker
+  - select your fork to deploy
+  - select base dir as `app/`
+  - set preset to `Nuxt`
+  - set .ENV
+    - `ADMIN_PASSWORD`
+    - `MONGO_URL`
+  
+- Deploy on raspi client
+  - Clone directory onto raspberry pi with `git clone https://github.com/lobobellos/time-tracker.git`
+  - navigate to `client/` with `cd client/`
+  - `npm i` to install deps
+  - Create .env
+    - Set `PROD_URL` to your vercel url
+  - Give script execute perms with `chmod +x scripts/startTmux.sh`
+  - Edit your `/etc/rc.local` file, to look like this, replacing `/absolute/path/` with your actual one, which will be something like `/home/pi/projects/time-tracker/` on a raspberrypi
 
   ```shell
   #!/bin/sh -e
@@ -74,20 +82,18 @@ This project uses multiple technologies for the different parts of it. Here's a 
   ```
 
 ## Dev Setup
-
-- Clone directory with `git clone https://github.com/lobobellos/time-tracker.git`
-- `npm i` to install deps
-- `npm run create-data` to create empty database
-- Create .env
-  - Set `ADMIN_PASSWORD`
-  - Set `IS_PROD = "false"`
-  - Set `PORT` Default is 8080
-  - Set `BUILT = "false"` 
-
 ### Supported Hardware
-
 - Anything that can run nodejs
 
 ### Dependencies
-
 - npm and node v18+
+
+### Steps
+- Clone directory with `git clone https://github.com/lobobellos/time-tracker.git`
+- Navigate to `app/`
+- `npm i` to install deps
+- Create .env
+  - `ADMIN_PASSWORD`
+  - `MONGO_URL`
+- `npm run dev` to start nuxt dev server 
+
