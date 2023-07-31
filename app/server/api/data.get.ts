@@ -16,24 +16,24 @@ export default defineEventHandler(async (event) => {
           .reduce((a, b) => a + b, 0)
       }))
         .sort(({ sumTime: a }, { sumTime: b }) => a - b)
-        .map(e=>{
-          let {sumTime} =e 
-        const ms = sumTime % 1000;
-        sumTime = Math.floor(sumTime / 1000)
-        const s = sumTime % 60;
-        sumTime = Math.floor(sumTime / 60)
-        const m = sumTime % 60;
-        sumTime = Math.floor(sumTime / 60)
-        const h = sumTime % 24;
-        sumTime = Math.floor(sumTime / 24)
-        const d = sumTime;
-        return{
-          ...e,
-          sumTimeString : ` ${d} days, ${h} hours, ${m} mins`,
+        .map(e => {
+          let { sumTime } = e
+          const ms = sumTime % 1000;
+          sumTime = Math.floor(sumTime / 1000)
+          const s = sumTime % 60;
+          sumTime = Math.floor(sumTime / 60)
+          const m = sumTime % 60;
+          sumTime = Math.floor(sumTime / 60)
+          const h = sumTime % 24;
+          sumTime = Math.floor(sumTime / 24)
+          const d = sumTime;
+          return {
+            ...e,
+            sumTimeString: ` ${d} days, ${h} hours, ${m} mins`,
             ms,
             s,
             m,
-            h,d
+            h, d
           }
         })
     }
@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
     return {
       ok: false,
       message: String(err),
-      data:null
+      data: null
     };
   }
 })

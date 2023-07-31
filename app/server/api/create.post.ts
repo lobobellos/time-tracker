@@ -2,22 +2,22 @@ import users from '../dbModels/user'
 interface IRequestBody {
   pin: number
   name: string
-  title:string
+  title: string
 }
 
 export default defineEventHandler(async (event) => {
-  const {pin, name, title} = await readBody<IRequestBody>(event)
+  const { pin, name, title } = await readBody<IRequestBody>(event)
   console.log("trying to create acct", pin, name, title)
-  
+
   try {
     const userData = await users.findOne({
-      pin:pin
+      pin: pin
     });
-    console.log("users with same pin: ",userData)
+    console.log("users with same pin: ", userData)
     if (userData) {
       console.log(`User with pin ${pin} already exists`);
       return {
-        ok:false,
+        ok: false,
         code: "USER_EXISTS",
         message: "User with given pin already exists.",
       };
@@ -27,10 +27,10 @@ export default defineEventHandler(async (event) => {
         pin,
         name,
         title,
-        bio:'',
-        roomTimes:[]
+        bio: '',
+        roomTimes: []
       });
-      
+
       setCookie(event, "id", pin.toString())
       return {
         ok: true,
@@ -39,11 +39,11 @@ export default defineEventHandler(async (event) => {
     }
   } catch (err) {
     return {
-      ok:false,
+      ok: false,
       message: String(err),
     };
   }
 })
 
-  
+
 

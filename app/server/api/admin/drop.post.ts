@@ -5,12 +5,12 @@ export default defineEventHandler(async (event) => {
   console.log('dropping')
   if (password === useRuntimeConfig().adminPassword) {
     await user.deleteMany({})
-    return{
-      ok:true,
+    return {
+      ok: true,
     }
-  }else{
-    return{
-      ok:false
+  } else {
+    return {
+      ok: false
     }
   }
 })

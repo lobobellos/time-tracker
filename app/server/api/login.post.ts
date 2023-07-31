@@ -3,7 +3,6 @@ import users from "../dbModels/user"
 export default defineEventHandler(async (event) => {
   console.log('user login request')
   const { pin } = await readBody(event)
-
   const data = await users.findOne({
     pin,
   });
@@ -14,7 +13,7 @@ export default defineEventHandler(async (event) => {
       ok: true,
       message: "login successful"
     }
-  }else{
+  } else {
     return {
       ok: false,
       message: "login failed"
