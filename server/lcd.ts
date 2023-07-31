@@ -2,8 +2,6 @@ import LCD from 'lcd'
 export default class Lcd {
   static initialized = false
   static ready = false
-  private static line1 = ''
-  private static line2 = ""
   private static lcd =new LCD({ rs: 26, e: 19, data: [13, 6, 5, 11], cols: 16, rows: 2 })
   private static async init() {
     this.lcd.on('ready', async () => {
@@ -17,10 +15,16 @@ export default class Lcd {
       }, 1000)
     })
   }
-  set line1(line: string) {
+  static set line1(line: string) {
     this.line1 = line.substring(0,16)
   }
-  set line2(line: string) {
+  static get line1():never {
+    throw new Error("line1 is private")
+  }
+  static set line2(line: string) {
     this.line2 = line.substring(0,16)
+  }
+  static get line2():never {
+    throw new Error("line2 is private")
   }
 }
