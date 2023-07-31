@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@replit/database": "^2.0.5",
-    "pastebin-api": "^5.1.6"
+    "pastebin-api": "^5.1.6",
+    "sass": "^1.64.1"
   }
 }
