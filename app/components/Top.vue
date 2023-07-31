@@ -59,7 +59,7 @@ import Cookies from 'js-cookie'
 
 
 const width = ref(0)
-const isLoggedIn = ref(Cookies.get('pin') != undefined)
+const isLoggedIn = ref(Cookies.get('id') != undefined)
 const dropdown = ref({
 	isOpen: false,
 	rotation: 0,
