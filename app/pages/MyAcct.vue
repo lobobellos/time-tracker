@@ -1,8 +1,8 @@
 <template>
 	<div v-if="!userInfo">loading...</div>
 	<div v-else class="container">
-		<h1>Hello, {{ userInfo[1] }}</h1>
-		<h4>{{ userInfo[2] }}</h4>
+		<h1>Hello, {{ userInfo.name }}</h1>
+		<h4>{{ userInfo.title }}</h4>
 		<button @click="showLightBox = true" id="changePin">
 			Change Pin
 		</button>
@@ -10,12 +10,12 @@
 			class="changeSomething"
 			@submit.prevent="changeName"
 		>
-			<label for="changeTitle">Change Name</label>
+			<label for="changeName">Change Name</label>
 			<input
 				type="text"
-				id="changeTitle"
+				id="changeName"
 				v-model="newName"
-				:placeholder="userInfo[1]"
+				:placeholder="userInfo.name"
 			/>
 			<button type="submit">Change</button>
 		</form>
@@ -28,7 +28,7 @@
 				type="text"
 				id="changeTitle"
 				v-model="newTitle"
-				:placeholder="userInfo[2]"
+				:placeholder="userInfo.title"
 			/>
 			<button type="submit">Change</button>
 		</form>
@@ -45,7 +45,7 @@
 	<button @click="showAllTimes">Show All</button>
 
 	<PinSelector
-		:pin="getPin()"
+		:pin="getID()"
 		:show-lightbox="showLightBox"
 		@data="handleLightboxSubmit"
 		@cancel="handleLightboxCancel"
@@ -57,15 +57,15 @@ import Cookies from 'js-cookie'
 import PinSelector from '../components/PinSelector.vue'
 import type { PinData } from '../components/PinSelector.vue.js'
 
-if (!getPin()) useRouter().push('/login')
+if (!getID()) useRouter().push('/login')
 
 const newName = ref('')
 const newTitle = ref('')
 const showLightBox = ref(false)
 const numTimesShown = ref(15)
 
-function getPin() {
-	return Number(Cookies.get('pin') ?? (()=>{throw new Error('something went wrong')})())
+function getID() {
+	return Cookies.get('id') ?? (()=>{throw new Error('no id found')})()
 }
 
 const {
@@ -76,10 +76,10 @@ const {
 	const { data } = await $fetch('/api/getUser', {
 		method: 'POST',
 		body: {
-			pin: getPin(),
+			id: getID(),
 		},
 	})
-	if (!getPin()) useRouter().push('/login')
+	if (!getID()) useRouter().push('/login')
 	console.log(data)
 	return data
 })
@@ -87,7 +87,7 @@ const {
 function topTimes() {
 	return !userInfo.value
 		? []
-		: userInfo.value[3]
+		: userInfo.value.roomTimes
 				.map(time => [...time, time[1] - time[0]])
 				.sort((a, b) => b[2] - a[2])
 				.slice(0, numTimesShown.value)
@@ -104,13 +104,11 @@ async function handleLightboxSubmit(e: PinData) {
 	showLightBox.value = false
 	if (e.currPin == e.newPin) {
 		alert('Pin cannot be the same')
-	} else if (e.currPin != getPin()) {
-		alert('current pin incorrect')
 	} else {
 		$fetch('/api/change/pin', {
 			method: 'POST',
 			body: {
-				pin: getPin(),
+				pin: getID(),
 				newPin: e.newPin,
 			},
 		}).then(res => {
@@ -133,7 +131,7 @@ async function changeName() {
 	$fetch('/api/change/name', {
 		method: 'POST',
 		body: {
-			pin: getPin(),
+			pin: getID(),
 			newName: newName.value,
 		},
 	}).then(async res => {
@@ -150,7 +148,7 @@ function changeTitle() {
 	$fetch('/api/change/title', {
 		method: 'POST',
 		body: {
-			pin: getPin(),
+			pin: getID(),
 			newTitle: newTitle.value,
 		},
 	}).then(async res => {
