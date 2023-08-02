@@ -45,7 +45,6 @@
 	<button @click="showAllTimes">Show All</button>
 
 	<PinSelector
-		:pin="getID()"
 		:show-lightbox="showLightBox"
 		@data="handleLightboxSubmit"
 		@cancel="handleLightboxCancel"
@@ -55,7 +54,6 @@
 <script setup lang="ts">
 import Cookies from 'js-cookie'
 import PinSelector from '../components/PinSelector.vue'
-import type { PinData } from '../components/PinSelector.vue.js'
 
 if (!getID()) useRouter().push('/login')
 
@@ -106,7 +104,7 @@ function topTimes() {
 				])
 }
 
-async function handleLightboxSubmit(e: PinData) {
+async function handleLightboxSubmit(e: { currPin: any; newPin: { toString: () => string; }; }) {
 	showLightBox.value = false
 	if (e.currPin == e.newPin) {
 		alert('Pin cannot be the same')
@@ -152,7 +150,7 @@ function changeTitle() {
 	$fetch('/api/change/title', {
 		method: 'POST',
 		body: {
-			pin: getID(),
+			id: getID(),
 			newTitle: newTitle.value,
 		},
 	}).then(async res => {
