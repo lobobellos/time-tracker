@@ -37,12 +37,13 @@
 	<h3>Top Times</h3>
 	<br />
 	<div class="times">
-		<div class="time" v-for="time in topTimes">
+		<div class="time" v-for="time in topTimes()">
 			<h3>{{ time[0] }}</h3>
 			<h5>{{ time[1] }}</h5>
 		</div>
 	</div>
 	<button @click="showAllTimes">Show All</button>
+	<div class="footer"></div>
 
 	<PinSelector
 		:show-lightbox="showLightBox"
@@ -61,6 +62,8 @@ const newName = ref('')
 const newTitle = ref('')
 const showLightBox = ref(false)
 const numTimesShown = ref(15)
+
+
 
 function getID() {
 	return (
@@ -239,5 +242,8 @@ button:hover {
 	margin: 0.5rem;
 	padding: 0.5rem;
 	border-radius: 1rem;
+}
+.footer {
+	margin-top: 1rem;
 }
 </style>
