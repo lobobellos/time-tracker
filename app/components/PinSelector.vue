@@ -28,15 +28,11 @@
 </template>
 
 <script setup lang="ts">
-export interface PinData {
+interface PinData {
 	currPin: number
 	newPin: number
 }
 defineProps({
-	pin: {
-		type: Number,
-		required: true,
-	},
 	showLightbox: {
 		type: Boolean,
 		required: true,
