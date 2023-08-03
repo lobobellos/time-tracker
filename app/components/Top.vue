@@ -7,7 +7,6 @@
 				id="logo"
 			/>
 		</router-link>
-		<router-link to="/admin">Admin</router-link>
 		<router-link v-if="!isLoggedIn" to="/createAcct">
 			Create Account
 		</router-link>
@@ -40,7 +39,6 @@
 			</div>
 		</div>
 		<div class="dropdown" v-if="dropdown.isOpen">
-			<router-link to="/admin">Admin</router-link>
 			<router-link v-if="!isLoggedIn" to="/createAcct">
 				Create Account
 			</router-link>
@@ -58,14 +56,16 @@
 import Cookies from 'js-cookie'
 
 const width = ref(0)
-const isLoggedIn = ref(Cookies.get('id') != undefined)
+const isLoggedIn = ref(Boolean(Cookies.get('id') ))
 const dropdown = ref({
 	isOpen: false,
 	rotation: 0,
 })
-
-window.addEventListener('resize', () => {
+onMounted(()=>{
 	width.value = window.innerWidth
+	window.addEventListener('resize', () => {
+		width.value = window.innerWidth
+	})
 })
 function dropdownToggle() {
 	dropdown.value.isOpen = !dropdown.value.isOpen
