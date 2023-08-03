@@ -29,7 +29,6 @@ async function login(e: Event) {
 		},
 	}).then(res => {
 		if (res.ok) {
-			alert(res.message)
 			useRouter().push('/MyAcct')
 		} else {
 			alert('something went wrong: ' + res.message)
