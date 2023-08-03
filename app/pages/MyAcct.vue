@@ -2,7 +2,7 @@
 import Cookies from 'js-cookie'
 import PinSelector from '../components/PinSelector.vue'
 
-if (!getID()) useRouter().push('/login')
+if (Cookies.get('id') == undefined) useRouter().push('/login')
 
 const newName = ref('')
 const newTitle = ref('')
@@ -28,7 +28,6 @@ const { data: userInfo, refresh } = useAsyncData(
 		})
 		if (!getID()) useRouter().push('/login')
 		console.log(data)
-		//@ts-ignore
 		return data
 	},
 )
