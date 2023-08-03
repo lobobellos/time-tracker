@@ -6,8 +6,8 @@ if (!getID()) useRouter().push('/login')
 
 const newName = ref('')
 const newTitle = ref('')
+const newBio = ref('')
 const showLightBox = ref(false)
-const numTimesShown = ref(15)
 
 function getID() {
 	return (
@@ -33,21 +33,6 @@ const { data: userInfo, refresh } = useAsyncData(
 	},
 )
 
-function topTimes() {
-	return !userInfo.value
-		? []
-		: userInfo.value.roomTimes
-				.map(time => [...time, time[1] - time[0]])
-				.sort((a, b) => b[2] - a[2])
-				.slice(0, numTimesShown.value)
-				.map(time => [
-					new Date(time[0]).toLocaleDateString(),
-					`total time: ${(
-						time[2] /
-						(1000 * 60 * 60)
-					).toFixed(2)} hours`,
-				])
-}
 async function handleLightboxSubmit(e: any) {
 	showLightBox.value = false
 	if (e.currPin == e.newPin) {
@@ -73,7 +58,7 @@ async function changeName() {
 		},
 	})
 	if (!res.ok) alert('something went wrong: ' + res.message)
-	refresh()
+	await refresh()
 	clearInputs()
 }
 async function changeTitle() {
@@ -85,12 +70,25 @@ async function changeTitle() {
 		},
 	})
 	if (!res.ok) alert('something went wrong: ' + res.message)
-	refresh()
+	await refresh()
+	clearInputs()
+}
+async function changeBio() {
+	const res = await $fetch('/api/change/bio', {
+		method: 'POST',
+		body: {
+			id: getID(),
+			newBio: newBio.value,
+		},
+	})
+	if (!res.ok) alert('something went wrong: ' + res.message)
+	await refresh()
 	clearInputs()
 }
 function clearInputs() {
 	newName.value = ''
 	newTitle.value = ''
+	newBio.value = ''
 }
 </script>
 
@@ -125,13 +123,16 @@ function clearInputs() {
 			/>
 			<button type="submit">Change</button>
 		</form>
-		<form class="changeSomething">
+		<form
+			class="changeSomething"
+			@submit.prevent="changeBio"
+		>
 			<div class="label">
 				<label for="changeBio">Bio</label>
 				<button>Change</button>
 			</div>
 			<textarea
-				v-model="userInfo.bio"
+				v-model="newBio"
 				:placeholder="userInfo.bio"
 			></textarea>
 		</form>
@@ -143,16 +144,9 @@ function clearInputs() {
 	</div>
 
 	<h3>Top Times</h3>
-	<br />
-	<div class="times">
-		<div class="time" v-for="time in topTimes()">
-			<h3>{{ time[0] }}</h3>
-			<h5>{{ time[1] }}</h5>
-		</div>
-	</div>
-	<button @click="numTimesShown = Infinity">
-		Show All
-	</button>
+	<TimesDisplay
+		:times="userInfo ? userInfo.roomTimes : []"
+	/>
 	<div class="footer"></div>
 
 	<PinSelector
@@ -163,10 +157,10 @@ function clearInputs() {
 </template>
 
 <style scoped lang="scss">
+* {
+	font-family: 'Fira sans';
+}
 .container {
-	* {
-		font-family: 'Fira sans';
-	}
 	h1 {
 		margin-bottom: 0;
 	}
@@ -184,6 +178,9 @@ function clearInputs() {
 	.label {
 		label {
 			margin-bottom: 0.5rem;
+		}
+		button {
+			margin-left: 0;
 		}
 		display: flex;
 		flex-direction: column;
@@ -216,33 +213,12 @@ button {
 	transition: background-position 0.3s; /* Set transition duration */
 	padding: 0.2rem;
 }
-#changePin {
-	margin-top: 0.5rem;
-	padding: 0.5rem;
-}
 button:hover {
 	background-position: 0 -100%; /* Move gradient upwards */
 }
-.times {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: center;
-}
-.time {
-	text-align: center;
-	color: black;
-	background-color: blueviolet;
-	margin: 0.5rem;
+#changePin {
+	margin-top: 0.5rem;
 	padding: 0.5rem;
-	border-radius: 1rem;
-	h3 {
-		margin-top: 0;
-		margin-bottom: 0.2rem;
-	}
-	h5 {
-		margin: 0;
-	}
 }
 .footer {
 	margin-top: 1rem;
