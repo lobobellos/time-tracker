@@ -76,7 +76,7 @@ async function changeName() {
 	refresh()
 	clearInputs()
 }
-function changeTitle() {
+async function changeTitle() {
 	const res = await $fetch('/api/change/title', {
 		method: 'POST',
 		body: {
