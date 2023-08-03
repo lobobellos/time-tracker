@@ -1,57 +1,3 @@
-<template>
-	<div v-if="!userInfo">loading...</div>
-	<div v-else class="container">
-		<h1>Hello, {{ userInfo.name }}</h1>
-		<h4>{{ userInfo.title }}</h4>
-		<form
-			class="changeSomething"
-			@submit.prevent="changeName"
-		>
-			<label for="changeName">Change Name</label>
-			<input
-				type="text"
-				id="changeName"
-				v-model="newName"
-				:placeholder="userInfo.name"
-			/>
-			<button type="submit">Change</button>
-		</form>
-		<form
-			class="changeSomething"
-			@submit.prevent="changeTitle"
-		>
-			<label for="changeTitle">Change Title</label>
-			<input
-				type="text"
-				id="changeTitle"
-				v-model="newTitle"
-				:placeholder="userInfo.title"
-			/>
-			<button type="submit">Change</button>
-		</form>
-	</div>
-	<button @click="showLightBox = true" id="changePin">
-		Change Pin
-	</button>
-
-	<h3>Top Times</h3>
-	<br />
-	<div class="times">
-		<div class="time" v-for="time in topTimes()">
-			<h3>{{ time[0] }}</h3>
-			<h5>{{ time[1] }}</h5>
-		</div>
-	</div>
-	<button @click="showAllTimes">Show All</button>
-	<div class="footer"></div>
-
-	<PinSelector
-		:show-lightbox="showLightBox"
-		@data="handleLightboxSubmit"
-		@cancel="handleLightboxCancel"
-	/>
-</template>
-
 <script setup lang="ts">
 import Cookies from 'js-cookie'
 import PinSelector from '../components/PinSelector.vue'
@@ -63,8 +9,6 @@ const newTitle = ref('')
 const showLightBox = ref(false)
 const numTimesShown = ref(15)
 
-
-
 function getID() {
 	return (
 		Cookies.get('id') ??
@@ -73,23 +17,21 @@ function getID() {
 		})()
 	)
 }
-
-const {
-	data: userInfo,
-	pending,
-	refresh,
-} = useAsyncData('userInfo', async () => {
-	const { data } = await $fetch('/api/getUser', {
-		method: 'POST',
-		body: {
-			id: getID(),
-		},
-	})
-	if (!getID()) useRouter().push('/login')
-	console.log(data)
-	//@ts-ignore
-	return data
-})
+const { data: userInfo, refresh } = useAsyncData(
+	'userInfo',
+	async () => {
+		const { data } = await $fetch('/api/getUser', {
+			method: 'POST',
+			body: {
+				id: getID(),
+			},
+		})
+		if (!getID()) useRouter().push('/login')
+		console.log(data)
+		//@ts-ignore
+		return data
+	},
+)
 
 function topTimes() {
 	return !userInfo.value
@@ -106,77 +48,125 @@ function topTimes() {
 					).toFixed(2)} hours`,
 				])
 }
-
-async function handleLightboxSubmit(e: { currPin: any; newPin: { toString: () => string; }; }) {
+async function handleLightboxSubmit(e: any) {
 	showLightBox.value = false
 	if (e.currPin == e.newPin) {
 		alert('Pin cannot be the same')
 	} else {
-		$fetch('/api/change/pin', {
+		const res = await $fetch('/api/change/pin', {
 			method: 'POST',
 			body: {
 				pin: getID(),
 				newPin: e.newPin,
 			},
-		}).then(res => {
-			if (res.ok) {
-				Cookies.set('pin', e.newPin.toString())
-				refresh()
-			} else {
-				alert('something went wrong' + res.message)
-			}
 		})
+		if (!res.ok)
+			alert('something went wrong: ' + res.message)
 	}
 }
-
-function handleLightboxCancel() {
-	showLightBox.value = false
-	console.log('cancelled')
-}
-
 async function changeName() {
-	$fetch('/api/change/name', {
+	const res = await $fetch('/api/change/name', {
 		method: 'POST',
 		body: {
 			id: getID(),
 			newName: newName.value,
 		},
-	}).then(async res => {
-		alert(
-			res.ok ? 'name changed successfully' : res.message,
-		)
-		refresh()
 	})
+	if (!res.ok) alert('something went wrong: ' + res.message)
+	refresh()
 	clearInputs()
 }
 function changeTitle() {
-	$fetch('/api/change/title', {
+	const res = await $fetch('/api/change/title', {
 		method: 'POST',
 		body: {
 			id: getID(),
 			newTitle: newTitle.value,
 		},
-	}).then(async res => {
-		alert(
-			res.ok ? 'title changed successfully' : res.message,
-		)
-		refresh()
 	})
+	if (!res.ok) alert('something went wrong: ' + res.message)
+	refresh()
 	clearInputs()
 }
-
-function showAllTimes() {
-	numTimesShown.value = Infinity
-}
-
 function clearInputs() {
 	newName.value = ''
 	newTitle.value = ''
 }
 </script>
 
+<template>
+	<div v-if="!userInfo">loading...</div>
+	<div v-else class="container">
+		<h1>Hello, {{ userInfo.name }}</h1>
+		<h4>{{ userInfo.title }}</h4>
+		<form
+			class="changeSomething"
+			@submit.prevent="changeName"
+		>
+			<label for="changeName">Name</label>
+			<input
+				type="text"
+				id="changeName"
+				v-model="newName"
+				:placeholder="userInfo.name"
+			/>
+			<button type="submit">Change</button>
+		</form>
+		<form
+			class="changeSomething"
+			@submit.prevent="changeTitle"
+		>
+			<label for="changeTitle">Title</label>
+			<input
+				type="text"
+				id="changeTitle"
+				v-model="newTitle"
+				:placeholder="userInfo.title"
+			/>
+			<button type="submit">Change</button>
+		</form>
+		<form class="changeSomething">
+			<div class="label">
+				<label for="changeBio">Bio</label>
+				<button>Change</button>
+			</div>
+			<textarea
+				v-model="userInfo.bio"
+				:placeholder="userInfo.bio"
+			></textarea>
+		</form>
+	</div>
+	<div class="changeSomething">
+		<button @click="showLightBox = true" id="changePin">
+			Change Pin
+		</button>
+	</div>
+
+	<h3>Top Times</h3>
+	<br />
+	<div class="times">
+		<div class="time" v-for="time in topTimes()">
+			<h3>{{ time[0] }}</h3>
+			<h5>{{ time[1] }}</h5>
+		</div>
+	</div>
+	<button @click="numTimesShown = Infinity">
+		Show All
+	</button>
+	<div class="footer"></div>
+
+	<PinSelector
+		:show-lightbox="showLightBox"
+		@data="handleLightboxSubmit"
+		@cancel="showLightBox = false"
+	/>
+</template>
+
 <style scoped lang="scss">
 .container {
+	* {
+		font-family: 'Fira sans';
+	}
 	h1 {
 		margin-bottom: 0;
 	}
@@ -191,7 +181,15 @@ function clearInputs() {
 	label {
 		margin-left: 0;
 	}
-	input {
+	.label {
+		label {
+			margin-bottom: 0.5rem;
+		}
+		display: flex;
+		flex-direction: column;
+	}
+	input,
+	textarea {
 		background-color: #c3a6df;
 		border: 2px solid blueviolet;
 		border-radius: 0.3rem;
@@ -204,14 +202,7 @@ function clearInputs() {
 		margin-right: 0.2rem;
 	}
 }
-#changePin {
-	margin-top: 1rem;
-	padding: 0.5rem;
-	border-radius: 0.5rem;
-}
 button {
-	margin-top: 0rem;
-	font-family: 'Fira sans';
 	font-weight: 600;
 	background-color: #a56dda;
 	border: 0px;
@@ -223,8 +214,12 @@ button {
 	); /* Set gradient to new color */
 	background-size: 100% 200%; /* Set size of gradient */
 	transition: background-position 0.3s; /* Set transition duration */
+	padding: 0.2rem;
 }
-
+#changePin {
+	margin-top: 0.5rem;
+	padding: 0.5rem;
+}
 button:hover {
 	background-position: 0 -100%; /* Move gradient upwards */
 }
@@ -235,13 +230,19 @@ button:hover {
 	justify-content: center;
 }
 .time {
-	font-family: 'Fira sans';
 	text-align: center;
-	color: white;
+	color: black;
 	background-color: blueviolet;
 	margin: 0.5rem;
 	padding: 0.5rem;
 	border-radius: 1rem;
+	h3 {
+		margin-top: 0;
+		margin-bottom: 0.2rem;
+	}
+	h5 {
+		margin: 0;
+	}
 }
 .footer {
 	margin-top: 1rem;
