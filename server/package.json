@@ -5,14 +5,7 @@
   "type": "module",
   "main": "index.ts",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview",
-    "start": "node --no-warnings --loader ts-node/esm index.ts",
-    "server": "node --no-warnings --loader ts-node/esm server.ts",
-    "create-data": "node --no-warnings --loader ts-node/esm scripts/resetData.ts",
-    "inputListen": "node --no-warnings --loader ts-node/esm inputListener.ts",
-    "watchData": "node --no-warnings --loader ts-node/esm scripts/watchData.ts"
+    "start": "node --no-warnings --loader ts-node/esm index.ts"
   },
   "dependencies": {
     "@futpib/node-global-key-listener": "^1.0.3",
