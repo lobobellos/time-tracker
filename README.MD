@@ -59,7 +59,7 @@ This project uses multiple technologies for the different parts of it. Here's a 
   - Clone directory onto raspberry pi with `git clone https://github.com/lobobellos/time-tracker.git`
   - navigate to `client/` with `cd client/`
   - `npm i` to install deps
-  - `npm i rpi-gpio lcd`
+  - `npm i rpi-gpio lcd global-keypress`
   - Create .env
     - Set `PROD_URL` to your vercel url
   - Give script execute perms with `chmod +x scripts/startTmux.sh`
