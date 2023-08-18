@@ -1,6 +1,5 @@
 <template>
 	<h1>Account Creation</h1>
-
 	<form type="POST" v-on:submit="e => submitForm(e)">
 		<label for="name">
 			Name (preferably your real one)
@@ -13,7 +12,6 @@
 			required
 		/>
 		<br />
-
 		<label for="title">Title (your job on the team)</label>
 		<br />
 		<input
@@ -23,7 +21,6 @@
 			required
 		/>
 		<br />
-
 		<label for="pin">pin</label>
 		<br />
 		<input
@@ -35,7 +32,6 @@
 			required
 		/>
 		<br />
-
 		<label for="pin2">retype pin</label>
 		<br />
 		<input
@@ -47,10 +43,8 @@
 			required
 		/>
 		<br />
-
 		<input type="submit" value="submit" />
 	</form>
-
 	<p>
 		Already have an account?
 		<router-link to="/login">login</router-link>
@@ -58,7 +52,6 @@
 </template>
 
 <script setup lang="ts">
-
 const name = ref('')
 const title = ref('')
 const pin = ref(0)
@@ -70,18 +63,18 @@ async function submitForm(e: Event) {
 		alert('pin does not match')
 		return
 	}
-	 $fetch('/api/create', {
+	$fetch('/api/create', {
 		method: 'POST',
 		body: {
 			pin: Number(pin.value),
 			name: name.value,
 			title: title.value,
 		},
-	}).then((res)=>{
-		if(res.ok){
+	}).then(res => {
+		if (res.ok) {
 			alert('account created')
-		}else{
-			alert('something went wrong: '+ res.message)
+		} else {
+			alert('something went wrong: ' + res.message)
 		}
 	})
 }

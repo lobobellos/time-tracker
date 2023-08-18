@@ -1,13 +1,12 @@
 import users from '../../dbModels/user'
 
 export default defineEventHandler(async (event) => {
-  console.log('title change request')
-  const { id, newTitle } = await readBody(event)
+  const { id, newBio } = await readBody(event);
   try {
-    await users.findByIdAndUpdate(id, { title: newTitle })
+    await users.findByIdAndUpdate(id, { bio: newBio })
     return {
       ok: true,
-      message: "title changed"
+      message: "name changed"
     }
   } catch (err) {
     return {
@@ -16,3 +15,5 @@ export default defineEventHandler(async (event) => {
     }
   }
 })
+
+

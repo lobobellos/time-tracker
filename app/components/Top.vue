@@ -1,54 +1,26 @@
 <template>
-	<div class="containerSpread" v-if="width > 600">
-		<router-link to="/">
-			<img
-				src="../assets/teamLogo.png"
-				alt="team logo"
-				id="logo"
-			/>
-		</router-link>
-		<router-link to="/admin">Admin</router-link>
-		<router-link v-if="!isLoggedIn" to="/createAcct">
-			Create Account
-		</router-link>
-		<router-link v-if="!isLoggedIn" to="/login">
-			Log in
-		</router-link>
-		<router-link v-else to="/myAcct">
-			My Account
-		</router-link>
-	</div>
-	<div class="withDropdown" v-else>
-		<div class="container">
+	<div class="container" >
+		<div class="logo">
 			<router-link to="/">
 				<img
 					src="../assets/teamLogo.png"
-					alt="logo"
+					alt="team logo"
 					id="logo"
 				/>
 			</router-link>
-			<div class="threeLineContainer">
-				<img
-					src="../assets/threeLines.svg"
-					alt="pages"
-					id="threeLines"
-					:style="{
-						transform: `rotate(${dropdown.rotation}deg)`,
-					}"
-					@click="dropdownToggle"
-				/>
-			</div>
 		</div>
-		<div class="dropdown" v-if="dropdown.isOpen">
-			<router-link to="/admin">Admin</router-link>
-			<router-link v-if="!isLoggedIn" to="/createAcct">
+		<div class="navbar" v-if="isLoggedIn()">
+			<a @click="logOut">Log Out</a>
+			<router-link to="/myAcct">
+				My Account
+			</router-link>
+		</div>
+		<div class="navbar" v-else>
+			<router-link  to="/createAcct">
 				Create Account
 			</router-link>
-			<router-link v-if="!isLoggedIn" to="/login">
+			<router-link to="/login">
 				Log in
-			</router-link>
-			<router-link v-else to="/myAcct">
-				My Account
 			</router-link>
 		</div>
 	</div>
@@ -57,43 +29,44 @@
 <script setup lang="ts">
 import Cookies from 'js-cookie'
 
-
-const width = ref(0)
-const isLoggedIn = ref(Cookies.get('id') != undefined)
-const dropdown = ref({
-	isOpen: false,
-	rotation: 0,
-})
-
-window.addEventListener('resize', () => {
-	width.value = window.innerWidth
-})
-
-function dropdownToggle() {
-	dropdown.value.isOpen = !dropdown.value.isOpen
-	rotateImage()
+const isLoggedIn = function(){
+	return Cookies.get('id') != undefined
 }
-function rotateImage() {
-	dropdown.value.rotation -= 90
+
+function logOut(){
+	Cookies.remove('id')
+	window.location.reload()
 }
 </script>
 
-<style scoped>
-.containerSpread,
+<style scoped lang="scss">
 .container {
 	display: flex;
 	flex-direction: row;
 	background-color: rgb(165, 109, 218);
-}
-
-.containerSpread a {
-	margin-left: 0.4rem;
-	margin-right: 0.4rem;
-}
-
-.dropdown {
-	background-color: rgb(165, 109, 218);
-	padding: 0.5rem;
+	justify-content: space-between;
+	align-items: center;
+	.navbar {
+		display: flex;
+		flex-direction: row;
+		margin-right: 0.5rem;
+		a {
+			margin-right: 0.4rem;
+			margin-left: 0.4rem;
+			margin-bottom: 0.5rem;
+			font-family: 'Fira Sans', sans-serif;
+			font-size: 1.2rem;
+			font-weight: 400;
+			display: flex;
+			align-items: flex-end;
+			text-align: bottom;
+			text-decoration: none;
+			color: rgb(255, 255, 255);
+			background-color: rgb(92, 37, 180);
+			padding: 0.5rem;
+			border-radius: 0.5rem;
+		}
+	}
 }
 
 #logo {
@@ -101,29 +74,4 @@ function rotateImage() {
 	width: 50px;
 }
 
-.threeLineContainer {
-	display: flex;
-	margin-left: auto;
-	margin-right: 1rem;
-	align-items: center;
-}
-
-#threeLines {
-	width: 50px;
-	height: 50px;
-	transition: transform 100ms ease-in-out;
-	clip: rect(0, 50, 0, 50);
-}
-
-a {
-	margin-bottom: 0.5rem;
-	font-family: 'Fira Sans', sans-serif;
-	font-size: 1.5rem;
-	font-weight: 400;
-	display: flex;
-	align-items: flex-end;
-	text-align: bottom;
-	text-decoration: none;
-	color: rgb(255, 255, 255);
-}
 </style>

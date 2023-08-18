@@ -27,14 +27,12 @@ async function login(e: Event) {
 		body: {
 			pin: userPin.value,
 		},
-	}).then((res) => {
+	}).then(res => {
 		if (res.ok) {
-			alert(res.message)
 			useRouter().push('/MyAcct')
-		}else{
-			alert("something went wrong: "+ res.message)
+		} else {
+			alert('something went wrong: ' + res.message)
 		}
 	})
 }
 </script>
-
