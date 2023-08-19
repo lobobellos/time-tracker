@@ -21,9 +21,9 @@ This includes:
 This project uses multiple technologies for the different parts of it. Here's a breakdown:
 
 - Frontend
-  - [Nuxt](https://nuxt.com/)
+  - [Nuxt](https://nuxt.com/) [(vue)](https://vuejs.org/)
 - Backend
-  - [Nuxt](https://nuxt.com/)
+  - [Nuxt](https://nuxt.com/) [(nitro)](https://nitro.unjs.io/)
 - Database
   - [MongoDB](mongodb.com)
 - Hardware
