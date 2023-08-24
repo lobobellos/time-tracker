@@ -13,7 +13,8 @@ export async function init() {
   await gpio.promise.setup(7, gpio.DIR_IN, gpio.EDGE_RISING)
   await gpio.promise.setup(11, gpio.DIR_IN, gpio.EDGE_RISING)
 
-  Lcd.line1 = 'potato';
+	
+  Lcd.line2 = "it's working???";
 
   gpio.on('change', async rpipin => {
     if (pressedRecently) return;
@@ -22,6 +23,7 @@ export async function init() {
     console.log(`pin ${rpipin} pressed`)
     if (lastPin == null) {
       console.log("canot log in without first putting in pin");
+			Lcd.sayForSeconds("enter pin first",5000)
       return;
     };
     if (rpipin == 7) {
@@ -29,7 +31,12 @@ export async function init() {
       if (!clockedIn.has(lastPin)) {
         console.log('you are clocked in')
         clockedIn.set(lastPin, Date.now())
-      }
+				Lcd.sayForSeconds("Hello there,",5000,"General Kenobi")
+				
+      }else{
+        console.log('you were already clocked in')
+				Lcd.sayForSeconds("spam isn't cool",5000)
+			}
     } else if (rpipin == 11) {
       //clock out
       if (lastPin && clockedIn.has(lastPin) ) {
@@ -49,10 +56,10 @@ export async function init() {
 	        }).then(async res => {
 	          if (res.ok) {
 	            console.log("login succesfull")
-	            Lcd.line1 = "login succesfull"
+	            Lcd.sayForSeconds("login succesful",5000)
 	          }else{
 	            console.log("failure: "+ await res.text())
-	            Lcd.line1 = await res.text()
+							Lcd.sayForSeconds(await res.text(),5000)
 	          }
 	        }).catch(err=>{
 						console.log(err)
