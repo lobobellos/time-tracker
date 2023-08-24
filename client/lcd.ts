@@ -6,7 +6,7 @@ export default class Lcd {
   static line2 = "";
   
   private static lcd =new LCD({ rs: 26, e: 19, data: [13, 6, 5, 11], cols: 16, rows: 2 })
-  private static async init() {
+  static async init() {
     this.lcd.on('ready', async () => {
       setInterval(async () => {
         await this.lcd.clear();
@@ -21,6 +21,7 @@ export default class Lcd {
     process.on('SIGINT', _ => {
       this.lcd.close();
       console.log("\nLCD closing")
+			process.exit()
     });
 
   }
