@@ -98,7 +98,7 @@ export async function init() {
   });
 
   // process closed
-  gk.on('close', () => {
+  gk.on('\nkeylistener closing\n', () => {
     console.log('closed');
   });
 }
