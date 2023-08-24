@@ -54,7 +54,9 @@ export async function init() {
 	            console.log("failure: "+ await res.text())
 	            Lcd.line1 = await res.text()
 	          }
-	        })
+	        }).catch(err=>{
+						console.log(err)
+					})
 				}else{
 					console.log("invalid time")
 				}
