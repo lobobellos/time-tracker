@@ -17,6 +17,12 @@ export default class Lcd {
         });
       }, 1000)
     })
+
+    process.on('SIGINT', _ => {
+      lcd.close();
+      console.log("\nLCD closing")
+    });
+
   }
   
 }
