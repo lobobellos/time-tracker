@@ -31,7 +31,7 @@ export async function init() {
       if (!clockedIn.has(lastPin)) {
         console.log('you are clocked in')
         clockedIn.set(lastPin, Date.now())
-				Lcd.sayForSeconds("Hello there,",5000,"General Kenobi")
+				Lcd.sayForSeconds("Hello there",5000)
 				
       }else{
         console.log('you were already clocked in')
@@ -55,11 +55,11 @@ export async function init() {
 	          })
 	        }).then(async res => {
 	          if (res.ok) {
-	            console.log("login succesfull")
-	            Lcd.sayForSeconds("login succesful",5000)
+	            console.log("clocking out")
+	            Lcd.sayForSeconds("logout success",5000)
 	          }else{
 	            console.log("failure: "+ await res.text())
-							Lcd.sayForSeconds(await res.text(),5000)
+							Lcd.sayForSeconds("logout failure",5000)
 	          }
 	        }).catch(err=>{
 						console.log(err)
