@@ -13,6 +13,8 @@ export async function init() {
   await gpio.promise.setup(7, gpio.DIR_IN, gpio.EDGE_RISING)
   await gpio.promise.setup(11, gpio.DIR_IN, gpio.EDGE_RISING)
 
+  Lcd.line1 = 'potato';
+
   gpio.on('change', async rpipin => {
     if (pressedRecently) return;
     pressedRecently = true
