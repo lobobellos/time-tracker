@@ -17,13 +17,21 @@ export default class Lcd {
         });
       }, 1000)
     })
-
     process.on('SIGINT', _ => {
       this.lcd.close();
       console.log("\nLCD closing")
 			process.exit()
     });
-
   }
-  
+
+	static sayForSeconds(msg:string,s:number,line2? :string){
+		this.line1 = msg.substring(0,16)
+		this.line2 = line2?.substring(0,16)
+		setTimeout(()=>{
+			this.line1 = ""
+			this.line2 = ""
+		},s*1000)
+	}
+
+	static Say
 }
