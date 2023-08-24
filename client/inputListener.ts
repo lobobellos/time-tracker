@@ -20,7 +20,10 @@ export async function init() {
     pressedRecently = true
     setTimeout(() => pressedRecently = false, 500)
     console.log(`pin ${rpipin} pressed`)
-    if (lastPin == null) return
+    if (lastPin == null) {
+      console.log("canot log in without first putting in pin");
+      return;
+    };
     if (rpipin == 7) {
       //clock in
       if (!clockedIn.has(lastPin)) {
@@ -43,8 +46,10 @@ export async function init() {
           })
         }).then(async res => {
           if (res.ok) {
+            console.log("login succesfull")
             Lcd.line1 = "login succesfull"
           }else{
+            console.log("failure: "+ await res.text())
             Lcd.line1 = await res.text()
           }
         })
