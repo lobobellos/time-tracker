@@ -32,28 +32,31 @@ export async function init() {
       }
     } else if (rpipin == 11) {
       //clock out
-      if (lastPin && clockedIn.has(lastPin) ) {
+      if ( clockedIn.has(lastPin) ) {
         const time: time = [
           <number>clockedIn.get(lastPin),
           Date.now()
         ]
-        if (isvalid(time)) fetch(Global.prodUrl+"/api/client/addTime", {
-          method: "POST",
-          headers: [['Content-Type', 'application/json']],
-          body: JSON.stringify({
-            time,
-            pin:lastPin
+        if (isvalid(time)){
+          fetch(Global.prodUrl+"/api/client/addTime", {
+            method: "POST",
+            headers: [['Content-Type', 'application/json']],
+            body: JSON.stringify({
+              time,
+              pin:lastPin
+            })
+          }).then(async res => {
+            if (res.ok) {
+              console.log("login succesfull")
+              Lcd.line1 = "login succesfull"
+            }else{
+              console.log("failure: "+ await res.text())
+              Lcd.line1 = await res.text()
+            }
           })
-        }).then(async res => {
-          if (res.ok) {
-            console.log("login succesfull")
-            Lcd.line1 = "login succesfull"
-          }else{
-            console.log("failure: "+ await res.text())
-            Lcd.line1 = await res.text()
-          }
-        })
-
+        }else{
+          console.log("invalid time"
+        }
       }
     }
   })
