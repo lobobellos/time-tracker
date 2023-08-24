@@ -37,23 +37,27 @@ export async function init() {
           <number>clockedIn.get(lastPin),
           Date.now()
         ]
-        if (isvalid(time)) fetch(Global.prodUrl+"/api/client/addTime", {
-          method: "POST",
-          headers: [['Content-Type', 'application/json']],
-          body: JSON.stringify({
-            time,
-            pin:lastPin
-          })
-        }).then(async res => {
-          if (res.ok) {
-            console.log("login succesfull")
-            Lcd.line1 = "login succesfull"
-          }else{
-            console.log("failure: "+ await res.text())
-            Lcd.line1 = await res.text()
-          }
-        })
-
+				console.log("your time:\n",time)
+        if (isvalid(time)){
+					fetch(Global.prodUrl+"/api/client/addTime", {
+	          method: "POST",
+	          headers: [['Content-Type', 'application/json']],
+	          body: JSON.stringify({
+	            time,
+	            pin:lastPin
+	          })
+	        }).then(async res => {
+	          if (res.ok) {
+	            console.log("login succesfull")
+	            Lcd.line1 = "login succesfull"
+	          }else{
+	            console.log("failure: "+ await res.text())
+	            Lcd.line1 = await res.text()
+	          }
+	        })
+				}else{
+					console.log("invalid time")
+				}
       }
     }
   })
