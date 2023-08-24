@@ -19,7 +19,7 @@ export default class Lcd {
     })
 
     process.on('SIGINT', _ => {
-      lcd.close();
+      this.lcd.close();
       console.log("\nLCD closing")
     });
 
