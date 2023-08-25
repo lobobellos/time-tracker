@@ -14,8 +14,6 @@ export async function init() {
   await gpio.promise.setup(7, gpio.DIR_IN, gpio.EDGE_RISING)
   await gpio.promise.setup(11, gpio.DIR_IN, gpio.EDGE_RISING)
 
-	
-  Lcd.line2 = "it's working???";
 
   gpio.on('change', async rpipin => {
     if (pressedRecently) return;
@@ -43,8 +41,7 @@ export async function init() {
 					if (res.ok) {
 						console.log("login success")
 						clockedIn.set(lastPin, Date.now())
-						Lcd.line2 = "General Kenobi"
-						Lcd.sayForSeconds("Hello there,",5)
+						Lcd.sayForSeconds("Hello there,",5, "General Kenobi")
 					}else{
 						console.log("login failure",res)
 						Lcd.sayForSeconds("pin not found",5)

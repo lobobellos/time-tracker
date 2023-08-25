@@ -3,8 +3,8 @@ export default class Lcd {
   private static ready = false;
 	private static timeout: NodeJS.Timeout
 	
-  static line1 = "Welcome!";
-  static line2 = "Sign in below!";
+  private static line1 = "Welcome!";
+  private static line2 = "Sign in below!";
   private static lcd =new LCD({ rs: 26, e: 19, data: [13, 6, 5, 11], cols: 16, rows: 2 })
 	
   static async init() {
@@ -30,8 +30,9 @@ export default class Lcd {
 		}
 	}
 
-	static sayForSeconds(msg:string,s:number){
+	static sayForSeconds(msg:string,s:number,ln2:string){
 		this.line1 = msg.substring(0,16)
+		this.line2 = ln2 ?? ""
 		this.writeToLcd()
 		clearTimeout(this.timeout)
 		this.timeout = setTimeout(()=>{
