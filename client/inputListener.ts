@@ -29,7 +29,7 @@ export async function init() {
     if (rpipin == 7) {
       //clock in
       if (!clockedIn.has(lastPin)) {
-				fetch(Global.prodUrl+"/api/client/login", {
+				fetch(Global.prodUrl+"/api/login", {
 					method: "POST",
 					headers: [['Content-Type', 'application/json']],
 					body: JSON.stringify({
