@@ -42,7 +42,8 @@ export async function init() {
 					if (res.ok) {
 						console.log("login success")
 						clockedIn.set(lastPin, Date.now())
-						Lcd.sayForSeconds("Hello there",5)
+						Lcd.line2 = "General Kenobi"
+						Lcd.sayForSeconds("Hello there,",5)
 					}else{
 						console.log("login failure",res)
 						Lcd.sayForSeconds("pin not found",5)
@@ -62,6 +63,7 @@ export async function init() {
           Date.now()
         ]
 				console.log("your time:\n",time)
+				Lcd.sayForSeconds("logging out...",5)
         if (isvalid(time)){
 					fetch(Global.prodUrl+"/api/client/addTime", {
 	          method: "POST",
@@ -87,7 +89,10 @@ export async function init() {
 				}else{
 					console.log("invalid time")
 				}
-      }
+      }else{
+				console.log("you need to clock in first")
+				Lcd.sayForSeconds("log in first",5)
+			}
     }
   })
 
