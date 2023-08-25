@@ -9,6 +9,7 @@ export async function init() {
   let tempPin = ""
   let clockedIn = new Map<number, number>() //pin, timestamp
   let pressedRecently = false;
+	let pinClearTimeout: NodeJS.Timeout;
   
   await gpio.promise.setup(7, gpio.DIR_IN, gpio.EDGE_RISING)
   await gpio.promise.setup(11, gpio.DIR_IN, gpio.EDGE_RISING)
@@ -44,14 +45,11 @@ export async function init() {
 						Lcd.sayForSeconds("Hello there",5)
 					}else{
 						console.log("login failure",res)
-						
 						Lcd.sayForSeconds("pin not found",5)
 					}
 				}).catch(err=>{
 					console.log(err)
 				})
-				
-				
       }else{
         console.log('you were already clocked in')
 				Lcd.sayForSeconds("spam isn't cool",5)
@@ -75,6 +73,7 @@ export async function init() {
 	        })
 					.then(res=>res.json())
 					.then(async res => {
+						clockedIn.delete(lastPin)
 	          if (res.ok) {
 	            console.log("clocking out")
 	            Lcd.sayForSeconds("logout success",5)
@@ -118,7 +117,8 @@ export async function init() {
     if (data == "<KPEnter>" && tempPin != '') {
       lastPin = parseInt(tempPin)
       tempPin = ""
-      setTimeout(() => lastPin = null, 10e3)
+			clearTimeout(this.pinClearTimeout)
+      this.pinClearTimeout = setTimeout(() => lastPin = null, 10e3)
     }else if(data == "<Backspace>" && tempPin.length > 0){
 			tempPin = tempPin.substring(0,tempPin.length-1)
 		} else {
