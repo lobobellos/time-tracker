@@ -23,7 +23,7 @@ export async function init() {
     console.log(`pin ${rpipin} pressed`)
     if (lastPin == null) {
       console.log("canot log in without first putting in pin");
-			Lcd.sayForSeconds("enter pin first",5000)
+			Lcd.sayForSeconds("enter pin first",5)
       return;
     };
     if (rpipin == 7) {
@@ -31,11 +31,11 @@ export async function init() {
       if (!clockedIn.has(lastPin)) {
         console.log('you are clocked in')
         clockedIn.set(lastPin, Date.now())
-				Lcd.sayForSeconds("Hello there",5000)
+				Lcd.sayForSeconds("Hello there",5)
 				
       }else{
         console.log('you were already clocked in')
-				Lcd.sayForSeconds("spam isn't cool",5000)
+				Lcd.sayForSeconds("spam isn't cool",5)
 			}
     } else if (rpipin == 11) {
       //clock out
@@ -56,10 +56,10 @@ export async function init() {
 	        }).then(async res => {
 	          if (res.ok) {
 	            console.log("clocking out")
-	            Lcd.sayForSeconds("logout success",5000)
+	            Lcd.sayForSeconds("logout success",5)
 	          }else{
 	            console.log("failure: "+ await res.text())
-							Lcd.sayForSeconds("logout failure",5000)
+							Lcd.sayForSeconds("logout failure",5)
 	          }
 	        }).catch(err=>{
 						console.log(err)
@@ -97,8 +97,11 @@ export async function init() {
     if (data == "<KPEnter>" && tempPin != '') {
       lastPin = parseInt(tempPin)
       tempPin = ""
-      setTimeout(() => lastPin = null, 10_000)
-    } else {
+      setTimeout(() => lastPin = null, 10e3)
+			Lcd.sayForSeconds("enter pin first",5)
+    }if(data = "<Backspace>" && tempPin){
+			
+		} else {
       tempPin += (parseInt(KEYSTATETABLE[data] ?? "") || "").toString()
     }
     console.log(tempPin)
