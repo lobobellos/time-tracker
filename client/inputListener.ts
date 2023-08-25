@@ -92,7 +92,7 @@ export async function init() {
   gk.start();
 
   gk.on('press', ({ data }: any) => {
-    console.log(data)
+    console.log("\nraw data:",data)
 
     if (data == "<KPEnter>" && tempPin != '') {
       lastPin = parseInt(tempPin)
@@ -100,12 +100,12 @@ export async function init() {
       setTimeout(() => lastPin = null, 10e3)
 			Lcd.sayForSeconds("enter pin first",5)
     }else if(data = "<Backspace>" && tempPin.length > 0){
-			tempPin =tempPin.substring(0,tempPin.length-1)
+			tempPin = tempPin.substring(0,tempPin.length-1)
 		} else {
-      tempPin += (parseInt(KEYSTATETABLE[data] ?? "") || "").toString()
+      tempPin += (KEYSTATETABLE[data] ?? "").toString()
     }
-    console.log(tempPin)
-    console.log(lastPin)
+    console.log("temp pin:", tempPin)
+    console.log("last pin:", lastPin)
   })
 
   // process error
