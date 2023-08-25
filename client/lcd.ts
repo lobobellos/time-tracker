@@ -8,7 +8,8 @@ export default class Lcd {
   private static lcd =new LCD({ rs: 26, e: 19, data: [13, 6, 5, 11], cols: 16, rows: 2 })
 	
   static async init() {
-    this.lcd.on('ready', () => {
+    this.lcd.on('ready',async () => {
+			this.writeToLcd();
       this.ready = true;
     })
     process.on('SIGINT', _ => {
@@ -29,9 +30,8 @@ export default class Lcd {
 		}
 	}
 
-	static sayForSeconds(msg:string,s:number,line2? :string){
+	static sayForSeconds(msg:string,s:number){
 		this.line1 = msg.substring(0,16)
-		this.line2 = line2 ?? ""
 		this.writeToLcd()
 		clearTimeout(this.timeout)
 		this.timeout = setTimeout(()=>{

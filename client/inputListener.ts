@@ -30,6 +30,7 @@ export async function init() {
     if (rpipin == 7) {
       //clock in
       if (!clockedIn.has(lastPin)) {
+				Lcd.sayForSeconds("logging in...",5)
 				fetch(Global.prodUrl+"/api/login", {
 					method: "POST",
 					headers: [['Content-Type', 'application/json']],
@@ -53,7 +54,7 @@ export async function init() {
 				})
       }else{
         console.log('you were already clocked in')
-				Lcd.sayForSeconds("spam isn't cool",5)
+				Lcd.sayForSeconds("spam isn't cool",2)
 			}
     } else if (rpipin == 11) {
       //clock out
