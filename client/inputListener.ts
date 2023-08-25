@@ -22,13 +22,13 @@ export async function init() {
     console.log(`pin ${rpipin} pressed`)
     if (lastPin == null) {
       console.log("canot log in without first putting in pin");
-			Lcd.sayForSeconds("enter pin first",5)
+			Lcd.sayForSeconds("enter pin first",5,"")
       return;
     };
     if (rpipin == 7) {
       //clock in
       if (!clockedIn.has(lastPin)) {
-				Lcd.sayForSeconds("logging in...",5)
+				Lcd.sayForSeconds("logging in...",5,"")
 				fetch(Global.prodUrl+"/api/login", {
 					method: "POST",
 					headers: [['Content-Type', 'application/json']],
@@ -44,14 +44,14 @@ export async function init() {
 						Lcd.sayForSeconds("Hello there,",5, "General Kenobi")
 					}else{
 						console.log("login failure",res)
-						Lcd.sayForSeconds("pin not found",5)
+						Lcd.sayForSeconds("pin not found",5,"")
 					}
 				}).catch(err=>{
 					console.log(err)
 				})
       }else{
         console.log('you were already clocked in')
-				Lcd.sayForSeconds("spam isn't cool",2)
+				Lcd.sayForSeconds("spam isn't cool",2,"")
 			}
     } else if (rpipin == 11) {
       //clock out
@@ -61,7 +61,7 @@ export async function init() {
           Date.now()
         ]
 				console.log("your time:\n",time)
-				Lcd.sayForSeconds("logging out...",5)
+				Lcd.sayForSeconds("logging out...",5,"")
         if (isvalid(time)){
 					fetch(Global.prodUrl+"/api/client/addTime", {
 	          method: "POST",
@@ -76,10 +76,10 @@ export async function init() {
 						clockedIn.delete(lastPin)
 	          if (res.ok) {
 	            console.log("clocking out")
-	            Lcd.sayForSeconds("logout success",5)
+	            Lcd.sayForSeconds("logout success",5,"")
 	          }else{
 	            console.log("failure: "+ await res.text())
-							Lcd.sayForSeconds("logout failure",5)
+							Lcd.sayForSeconds("logout failure",5,"")
 	          }
 	        }).catch(err=>{
 						console.log(err)
@@ -89,7 +89,7 @@ export async function init() {
 				}
       }else{
 				console.log("you need to clock in first")
-				Lcd.sayForSeconds("log in first",5)
+				Lcd.sayForSeconds("log in first",5,"")
 			}
     }
   })
