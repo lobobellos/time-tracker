@@ -37,6 +37,7 @@ export default class Lcd {
 		this.timeout = setTimeout(()=>{
 			this.line1 = ""
 			this.line2 = ""
+			this.writeToLcd()
 		},s*1000)
 	}
 }
