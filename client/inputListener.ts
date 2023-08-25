@@ -99,8 +99,8 @@ export async function init() {
       tempPin = ""
       setTimeout(() => lastPin = null, 10e3)
 			Lcd.sayForSeconds("enter pin first",5)
-    }if(data = "<Backspace>" && tempPin){
-			
+    }else if(data = "<Backspace>" && tempPin.length > 0){
+			tempPin =tempPin.substring(0,tempPin.length-1)
 		} else {
       tempPin += (parseInt(KEYSTATETABLE[data] ?? "") || "").toString()
     }
