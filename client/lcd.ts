@@ -30,7 +30,7 @@ export default class Lcd {
 		}
 	}
 
-	static sayForSeconds(msg:string,s:number,ln2:string){
+	static sayForSeconds(msg:string,s:number,ln2?:string|undefined){
 		this.line1 = msg.substring(0,16)
 		this.line2 = ln2 ?? ""
 		this.writeToLcd()
