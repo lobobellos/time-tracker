@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
         name: user.name,
         title: user.title,
         sumTime: user.roomTimes
-          .map(a => a[0] + a[1])
+          .map(a => Math.abs(a[0] - a[1]))
           .reduce((a, b) => a + b, 0)
       }))
         .sort(({ sumTime: a }, { sumTime: b }) => a - b)
