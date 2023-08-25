@@ -29,9 +29,27 @@ export async function init() {
     if (rpipin == 7) {
       //clock in
       if (!clockedIn.has(lastPin)) {
-        console.log('you are clocked in')
-        clockedIn.set(lastPin, Date.now())
-				Lcd.sayForSeconds("Hello there",5)
+				fetch(Global.prodUrl+"/api/client/login", {
+	          method: "POST",
+	          headers: [['Content-Type', 'application/json']],
+	          body: JSON.stringify({
+	            pin:lastPin
+	          })
+	        })
+					.then(res=>res.json())
+					.then(async res => {
+	          if (res.ok) {
+	            console.log("login success")
+        			clockedIn.set(lastPin, Date.now())
+							Lcd.sayForSeconds("Hello there",5)
+	          }else{
+	            console.log("login failure")
+							Lcd.sayForSeconds("pin not found",5)
+	          }
+	        }).catch(err=>{
+						console.log(err)
+					})
+				
 				
       }else{
         console.log('you were already clocked in')
@@ -53,7 +71,9 @@ export async function init() {
 	            time,
 	            pin:lastPin
 	          })
-	        }).then(async res => {
+	        })
+					.then(res=>res.json())
+					.then(async res => {
 	          if (res.ok) {
 	            console.log("clocking out")
 	            Lcd.sayForSeconds("logout success",5)
