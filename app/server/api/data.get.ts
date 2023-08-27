@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
           .map(a => Math.abs(a[0] - a[1]))
           .reduce((a, b) => a + b, 0)
       }))
-        .sort(({ sumTime: a }, { sumTime: b }) => a - b)
+        .sort(({ sumTime: a }, { sumTime: b }) => -(a - b))
         .map(e => {
           let { sumTime } = e
           const ms = sumTime % 1000;
